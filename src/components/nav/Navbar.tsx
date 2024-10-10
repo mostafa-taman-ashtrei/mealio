@@ -2,7 +2,9 @@
 
 import { Button } from "../ui/button";
 import HoverLink from "@/components/general/HoverLink";
+import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/assets/logos/logo.png";
 import MobileNavbar from "@/components/nav/MobileNavbar";
 import ThemeTogglerButton from "./ThemeToggle";
 import { cn } from "@/lib/utils";
@@ -14,11 +16,16 @@ const NavRoutes: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
     const routes = createNavRoutes(pathname);
 
     return (
-        <div className="px-4 mx-auto max-w-7xl sm:px-6 border-b-2 pb-2">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 border-b-2 pb-3">
             <div className="relative pt-6">
                 <nav className="relative flex items-center justify-between sm:h-10 md:justify-center" aria-label="Global">
                     <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
-                        M
+                        <Image
+                            alt="mealio logo"
+                            src={Logo}
+                            width={60}
+                            height={60}
+                        />
                     </div>
 
                     <MobileNavbar />
