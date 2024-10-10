@@ -7,13 +7,16 @@ import Link from "next/link";
 import Logo from "@/assets/logos/logo.png";
 import MobileNavbar from "@/components/nav/MobileNavbar";
 import ThemeTogglerButton from "./ThemeToggle";
+import UserAvatar from "../general/UserAvatar";
 import { cn } from "@/lib/utils";
 import createNavRoutes from "./NavRoutes";
+import { useAuth } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 
 const NavRoutes: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
     const pathname = usePathname();
     const routes = createNavRoutes(pathname);
+    const { isSignedIn } = useAuth();
 
     return (
         <div className="px-4 mx-auto max-w-7xl sm:px-6 border-b-2 pb-3">
@@ -48,7 +51,14 @@ const NavRoutes: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
                     </div>
 
                     <div className="hidden gap-5 md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
-                        <Button className="rounded-full">Get Started</Button>
+                        {
+                            isSignedIn
+                                ? <UserAvatar />
+                                : <Link href="/sign-in">
+                                    <Button className="rounded-full">Get Started</Button>
+                                </Link>
+                        }
+
                         <ThemeTogglerButton />
                     </div>
                 </nav>

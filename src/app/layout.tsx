@@ -1,5 +1,6 @@
 import "./globals.css";
 
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import NavBar from "@/components/nav/Navbar";
 import NextThemeProvider from "@/providers/NextThemeProvider";
@@ -28,15 +29,17 @@ type RootLayoutProps = {
 
 const RootLayout = ({ children }: RootLayoutProps) => {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NextThemeProvider>
-          <NavBar />
-          {children}
-        </NextThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <NextThemeProvider>
+            <NavBar />
+            {children}
+          </NextThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
-}
+};
 
 export default RootLayout;
