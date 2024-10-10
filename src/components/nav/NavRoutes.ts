@@ -1,16 +1,16 @@
 const createNavRoutes = (activeString: string) => [
     {
-        href: "/pricing",
+        href: "/#pricing",
         label: "Pricing",
-        active: activeString === "pricing",
+        active: activeString === "/pricing",
     },
     {
-        href: "/about",
+        href: "/#about",
         label: "About Us",
         active: activeString === "about",
     },
     {
-        href: "/services",
+        href: "/#services",
         label: "Services",
         active: activeString === "services",
     },
