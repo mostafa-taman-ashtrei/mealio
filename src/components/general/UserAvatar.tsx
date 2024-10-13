@@ -1,5 +1,6 @@
 "use client";
 
+import { LayoutDashboard } from "lucide-react";
 import React from "react";
 import { UserButton } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
@@ -13,7 +14,11 @@ const UserAvatar = () => {
         <UserButton
             userProfileProps={{ appearance: clerkTheme }}
             appearance={clerkTheme}
-        />
+        >
+            <UserButton.MenuItems>
+                <UserButton.Link label="Dashboard" labelIcon={<LayoutDashboard size={17} />} href="/dashboard" />
+            </UserButton.MenuItems>
+        </UserButton>
     );
 };
 

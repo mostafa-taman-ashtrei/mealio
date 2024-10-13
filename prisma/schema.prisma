@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @default(uuid()) // Clerk userId reference
+  restaurants Restaurant[]
+  deletedd    Boolean      @default(false)
+  deletedAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Restaurant {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  ownerId     String // Reference to Clerk user ID
+  owner       User      @relation(fields: [ownerId], references: [id])
+  menus       Menu[]
+  deletedd    Boolean   @default(false)
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Menu {
+  id           String     @id @default(uuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  name         String
+  description  String?
+  menuItems    MenuItem[]
+  deletedd     Boolean    @default(false)
+  deletedAt    DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model MenuItem {
+  id          String     @id @default(uuid())
+  menuId      String
+  menu        Menu       @relation(fields: [menuId], references: [id])
+  name        String
+  description String?
+  price       Float
+  images      Image[]
+  discounts   Discount[] // Optional: Items can have one or more discounts
+  deletedd    Boolean    @default(false)
+  deletedAt   DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Image {
+  id         String    @id @default(uuid())
+  menuItemId String
+  menuItem   MenuItem  @relation(fields: [menuItemId], references: [id])
+  url        String
+  deletedd   Boolean   @default(false)
+  deletedAt  DateTime?
+  createdAt  DateTime  @default(now())
+}
+
+model Discount {
+  id          String    @id @default(uuid())
+  menuItemId  String?
+  menuItem    MenuItem? @relation(fields: [menuItemId], references: [id])
+  percentage  Float
+  description String?
+  startDate   DateTime?
+  endDate     DateTime?
+  deletedd    Boolean   @default(false)
+  deletedAt   DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
