@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import NavBar from "@/components/nav/Navbar";
 import NextThemeProvider from "@/providers/NextThemeProvider";
+import { Toaster } from "sonner";
 import localFont from "next/font/local";
 
 const geistSans = localFont({
@@ -35,6 +36,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
           <NextThemeProvider>
             <NavBar />
             {children}
+            <Toaster />
           </NextThemeProvider>
         </body>
       </html>

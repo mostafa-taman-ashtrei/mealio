@@ -1,5 +1,6 @@
+import ActivityChart from "./components/ActivityChart";
 import Container from "@/components/general/Container";
-import MenuGrid from "./components/MenuGrid";
+import PageGrid from "./components/PageGrid";
 import { Separator } from "@/components/ui/separator";
 
 const Dashboard: React.FC = () => {
@@ -8,15 +9,17 @@ const Dashboard: React.FC = () => {
         <Container>
             <div className="col-span-2 mt-4 w-full space-y-2">
                 <div>
-                    <h3 className="text-2xl font-medium">File Gallery</h3>
+                    <h3 className="text-2xl font-medium">Activity</h3>
                 </div>
 
-                <Separator className="bg-primary/10" />
+                <Separator />
             </div>
 
-            <MenuGrid menuName="Breakfast Menu" />
+            <div className="flex flex-col justify-center py-4">
+                <PageGrid />
+                <ActivityChart />
+            </div>
         </Container>
-
     );
 };
 

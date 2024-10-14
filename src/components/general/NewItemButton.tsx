@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Dialog,
     DialogContent,
@@ -7,6 +9,9 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
+import { NewFormType } from "@/types/ui";
+import NewItemForm from "@/app/menu/[menuId]/components/NewItemForm";
+import NewMenuForm from "@/app/dashboard/menus/components/NewMenuForm";
 import { PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,9 +19,12 @@ type NewMenuButtonProps = {
     className?: string;
     variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined;
     text: string;
+    formType: NewFormType
 }
 
-const NewItemButton: React.FC<NewMenuButtonProps> = ({ className, variant, text }) => {
+const NewItemButton: React.FC<NewMenuButtonProps> = ({ className, variant, text, formType }) => {
+    const form = formType === "menu" ? <NewMenuForm /> : <NewItemForm />;
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -37,7 +45,7 @@ const NewItemButton: React.FC<NewMenuButtonProps> = ({ className, variant, text 
                     <DialogTitle>{text}</DialogTitle>
                 </DialogHeader>
 
-                <h2>{text}</h2>
+                {form}
             </DialogContent>
         </Dialog>
     );
