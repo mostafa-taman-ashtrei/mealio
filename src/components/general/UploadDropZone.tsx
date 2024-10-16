@@ -10,13 +10,15 @@ type DropZoneProps = {
     // eslint-disable-next-line no-unused-vars
     handleError: (fileRejections: FileRejection[]) => void;
     maxDocumentSize: number;
+    multiple: boolean;
 }
 
 const UploadDropZone: React.FC<DropZoneProps> = ({
     isUploading,
     maxDocumentSize,
     handleUpload,
-    handleError
+    handleError,
+    multiple
 }) => {
 
     const acceptedFileTypes = {
@@ -27,7 +29,7 @@ const UploadDropZone: React.FC<DropZoneProps> = ({
 
     return (
         <ReactDropzone
-            multiple
+            multiple={multiple}
             noClick={true}
             maxFiles={3}
             maxSize={maxDocumentSize}

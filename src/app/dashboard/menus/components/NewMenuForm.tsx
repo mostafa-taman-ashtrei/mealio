@@ -2,7 +2,7 @@
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Loader, Wand2 } from "lucide-react";
-import NewMenuFormSchema, { NewMenuFormSchemaType } from "@/schemas/NewMenuForm";
+import NewMenuFormSchema, { NewMenuFormSchemaType } from "@/schemas/NewMenuFormSchema";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

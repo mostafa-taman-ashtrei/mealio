@@ -2,7 +2,7 @@
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Loader, Trash, Wand2 } from "lucide-react";
-import NewItemFormSchama, { NewItemFormSchamaType } from "@/schemas/NewItemForm";
+import NewItemFormSchama, { NewItemFormSchamaType } from "@/schemas/NewItemFromSchema";
 
 import { Button } from "@/components/ui/button";
 import { FileRejection } from "react-dropzone";
@@ -51,6 +51,7 @@ const NewItemForm: React.FC = () => {
 
             if (!data.results && !Array.isArray(data.results)) throw new Error("Failed To Upload Images");
 
+            return data;
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error("Error uploading images:", error);
@@ -154,6 +155,7 @@ const NewItemForm: React.FC = () => {
                                 handleUpload={handleDropUpload}
                                 isUploading={isUploading}
                                 maxDocumentSize={2 * 1024 * 1024}
+                                multiple
                             />
                         </FormItem>
                     )}

@@ -1,5 +1,6 @@
 import About from "./components/About";
 import Hero from "./components/Hero";
+import NewRestaurantForm from "../new-restaurant/components/NewRestaurantForm";
 import Pricing from "./components/Pricing";
 import Services from "./components/Services";
 

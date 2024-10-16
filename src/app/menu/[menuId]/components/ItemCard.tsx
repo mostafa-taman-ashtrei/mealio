@@ -13,6 +13,7 @@ const ItemCard: React.FC = () => {
                         width={1000}
                         height={1000}
                         alt="bowl icon"
+                        className="w-36 h-w-36 aspect-square rounded-full"
                     />
                 </span>
 

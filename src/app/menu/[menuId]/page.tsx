@@ -12,7 +12,7 @@ const MenuPage: React.FC<MenuPageProps> = ({ params }) => {
     const { menuId } = params;
 
     return (
-        <Container className="py-14">
+        <Container>
             <PageTitle text="Menu Items" />
             <p className="text-gray-500">These are all your items in the {menuId} menu</p>
 
