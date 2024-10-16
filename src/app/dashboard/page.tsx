@@ -1,10 +1,11 @@
+"use client";
+
 import ActivityChart from "./components/ActivityChart";
 import Container from "@/components/general/Container";
 import PageGrid from "./components/PageGrid";
 import { Separator } from "@/components/ui/separator";
 
 const Dashboard: React.FC = () => {
-
     return (
         <Container>
             <div className="col-span-2 mt-4 w-full space-y-2">

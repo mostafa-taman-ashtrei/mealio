@@ -119,7 +119,6 @@ const NewItemForm: React.FC = () => {
                     name="images"
                     render={({ field }) => (
                         <FormItem>
-
                             <div className="flex flex-row items-center justify-start gap-4">
                                 <FormLabel>Images</FormLabel>
                                 <FormMessage />
@@ -176,7 +175,7 @@ const NewItemForm: React.FC = () => {
                                 <FormControl>
                                     <Input
                                         disabled={loading}
-                                        placeholder="Menu Name"
+                                        placeholder="Hamburger ..."
                                         {...field}
                                         className="w-full"
                                     />

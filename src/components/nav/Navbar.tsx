@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
 const NavRoutes: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
     const pathname = usePathname();
     const routes = createNavRoutes(pathname);
-    const { isSignedIn } = useAuth();
+    const { isSignedIn, isLoaded } = useAuth();
 
     return (
         <div className="px-4 mx-auto max-w-7xl sm:px-6 pb-3">
@@ -54,7 +54,7 @@ const NavRoutes: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
 
                     <div className="hidden gap-5 md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
                         {
-                            isSignedIn
+                            isSignedIn && isLoaded
                                 ? <UserAvatar />
                                 : <Link href="/sign-in">
                                     <Button className="rounded-full">Get Started</Button>

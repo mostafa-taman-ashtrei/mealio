@@ -6,6 +6,7 @@ import NewMenuFormSchema, { NewMenuFormSchemaType } from "@/schemas/NewMenuForm"
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -40,7 +41,7 @@ const NewMenuForm: React.FC = () => {
                             </div>
 
                             <FormControl>
-                                <Input disabled={loading} placeholder="Menu Name" {...field} />
+                                <Input disabled={loading} placeholder="Breakfast Menu ..." {...field} />
                             </FormControl>
                         </FormItem>
                     )}
@@ -57,7 +58,13 @@ const NewMenuForm: React.FC = () => {
                             </div>
 
                             <FormControl>
-                                <Input disabled={loading} placeholder="Menu Description" {...field} />
+                                <Textarea
+                                    {...field}
+                                    disabled={loading}
+                                    rows={2}
+                                    className="resize-none"
+                                    placeholder="Tell us a little about this menu ..."
+                                />
                             </FormControl>
                         </FormItem>
                     )}

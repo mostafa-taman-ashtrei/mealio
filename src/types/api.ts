@@ -1,0 +1,1 @@
+export type requestMethodType = "get" | "post" | "delete" | "put";

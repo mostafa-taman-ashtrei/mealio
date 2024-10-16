@@ -49,11 +49,19 @@ const UploadDropZone: React.FC<DropZoneProps> = ({
                             className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-lg"
                         >
                             <div className="flex flex-col items-center justify-center pb-6 pt-5">
-                                <UploadCloud className="mb-2 h-14 w-14 text-zinc-500" />                                <p className="mb-2 text-sm text-zinc-700">
+                                <UploadCloud className="mb-2 h-14 w-14 text-zinc-500" />
+                                <p className="mb-2 text-sm text-zinc-700">
                                     <span className="font-semibold">
                                         Click to upload
-                                    </span>{" "}
-                                    or drag and drop your file here
+                                    </span>
+                                    {" "}
+                                    or
+                                    {" "}
+                                    <span className="font-semibold">
+                                        drag and drop
+                                    </span>
+                                    {" "}
+                                    your image(s) here
                                 </p>
                             </div>
 
