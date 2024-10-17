@@ -14,19 +14,23 @@ import NewItemForm from "@/app/menu/[menuId]/components/NewItemForm";
 import NewMenuForm from "@/app/dashboard/menus/components/NewMenuForm";
 import { PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 
 type NewMenuButtonProps = {
     className?: string;
     variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined;
     text: string;
-    formType: NewFormType
+    formType: NewFormType;
 }
 
 const NewItemButton: React.FC<NewMenuButtonProps> = ({ className, variant, text, formType }) => {
-    const form = formType === "menu" ? <NewMenuForm /> : <NewItemForm />;
+    const [openModal, setOpenModal] = useState(false);
+    const form = formType === "menu"
+        ? <NewMenuForm setOpenModal={setOpenModal} />
+        : <NewItemForm setOpenModal={setOpenModal} />;
 
     return (
-        <Dialog>
+        <Dialog open={openModal} onOpenChange={setOpenModal}>
             <DialogTrigger asChild>
                 <Button
                     className={cn(

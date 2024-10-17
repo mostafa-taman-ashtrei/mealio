@@ -1,5 +1,6 @@
 "use client";
 
+import { Dispatch, SetStateAction } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Loader, Wand2 } from "lucide-react";
 import NewMenuFormSchema, { NewMenuFormSchemaType } from "@/schemas/NewMenuFormSchema";
@@ -7,10 +8,22 @@ import NewMenuFormSchema, { NewMenuFormSchemaType } from "@/schemas/NewMenuFormS
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import createNewMenu from "@/services/menu/createNewMenu";
+import { devLog } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
+import useMenu from "@/hooks/useMenu";
+import useRestaurant from "@/hooks/useRestaurant";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const NewMenuForm: React.FC = () => {
+type NewMenuFormProps = {
+    setOpenModal: Dispatch<SetStateAction<boolean>>;
+}
+
+const NewMenuForm: React.FC<NewMenuFormProps> = ({ setOpenModal }) => {
+    const { restaurants } = useRestaurant();
+    const { addMenu } = useMenu();
+
     const form = useForm<NewMenuFormSchemaType>({
         resolver: zodResolver(NewMenuFormSchema),
         defaultValues: {
@@ -22,7 +35,28 @@ const NewMenuForm: React.FC = () => {
     const loading = form.formState.isSubmitting;
 
     const onSubmit = async (values: NewMenuFormSchemaType) => {
-        console.log(values);
+        try {
+            if (!restaurants || restaurants.length < 0) return toast({ title: "Something Went Wrong!", variant: "destructive" });
+
+
+            const { name, description } = values;
+            const mainRestaurantId = restaurants[0].id;
+
+            const { data, error, status } = await createNewMenu(mainRestaurantId, { name, description: description || null });
+
+
+            if (status === 500 || error) return toast({ title: "Failed to create restaurant" });
+
+            if (status === 201) {
+                toast({ title: "Restaurant created successfully" });
+                addMenu(data);
+                setOpenModal(false);
+            }
+
+        } catch (error) {
+            devLog(error, "error");
+            throw new Error("Failed to create menu");
+        }
     };
 
 

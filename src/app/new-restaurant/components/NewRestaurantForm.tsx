@@ -10,12 +10,21 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import UploadDropZone from "@/components/general/UploadDropZone";
+import createNewRestaurant from "@/services/restaurant/createRestaurant";
 import { toast } from "sonner";
+import uploadImagesToCloudinary from "@/services/upload/uploadImage";
+import { useAuth } from "@clerk/nextjs";
 import { useForm } from "react-hook-form";
+import useRestaurant from "@/hooks/useRestaurant";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const NewRestaurantForm: React.FC = () => {
+    const { userId: clerkId } = useAuth();
+    const router = useRouter();
+    const { addRestaurant } = useRestaurant();
+
     const [isUploading, setIsUploading] = useState(false);
 
     const form = useForm<NewRestaurantFormSchamaType>({
@@ -52,15 +61,10 @@ const NewRestaurantForm: React.FC = () => {
             const formData = new FormData();
             formData.append("images", file);
 
-            const response = await fetch("/api/upload", {
-                method: "POST",
-                body: formData,
-            });
+            const res = await uploadImagesToCloudinary(formData);
+            const { data, error, status } = res;
 
-            if (!response.ok) throw new Error("Failed to upload images");
-
-            const data = await response.json();
-
+            if (status === 500 || error) throw new Error("Failed to upload images");
             if (!data.results && !Array.isArray(data.results)) throw new Error("Failed To Upload Images");
 
             return data;
@@ -76,8 +80,28 @@ const NewRestaurantForm: React.FC = () => {
     const onSubmit = async (values: NewRestaurantFormSchamaType) => {
         try {
             const { logoUrl, name, description } = values;
-            const uploadedLogoUrl = await uploadLogo(logoUrl);
-            console.log(uploadedLogoUrl, name, description);
+            const cloudinaryData = await uploadLogo(logoUrl);
+            const secureImageUrl = cloudinaryData?.results[0].secure_url;
+
+            if (!clerkId || !secureImageUrl) return toast("Failed to create restaurant", { className: "dark:bg-black dark:text-primary" });
+
+
+            const { data, error, status } = await createNewRestaurant(
+                clerkId,
+                {
+                    name,
+                    description: description || null,
+                    logoUrl: secureImageUrl
+                }
+            );
+
+            if (status === 500 || error) return toast("Failed to create restaurant", { className: "dark:bg-black dark:text-primary" });
+
+            if (status === 201) {
+                toast.success("Restaurant created successfully", { className: "dark:bg-black dark:text-primary" });
+                addRestaurant(data);
+                router.push("/dashboard");
+            }
 
         } catch {
             throw new Error("Failed to create restaurant");

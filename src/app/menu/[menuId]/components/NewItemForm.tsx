@@ -1,5 +1,6 @@
 "use client";
 
+import { Dispatch, SetStateAction, useState } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Loader, Trash, Wand2 } from "lucide-react";
 import NewItemFormSchama, { NewItemFormSchamaType } from "@/schemas/NewItemFromSchema";
@@ -10,12 +11,16 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import UploadDropZone from "@/components/general/UploadDropZone";
+import { devLog } from "@/lib/utils";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const NewItemForm: React.FC = () => {
+type NewItemFormProps = {
+    setOpenModal: Dispatch<SetStateAction<boolean>>;
+}
+
+const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
     const [isUploading, setIsUploading] = useState(false);
 
     const form = useForm<NewItemFormSchamaType>({
@@ -104,11 +109,11 @@ const NewItemForm: React.FC = () => {
 
 
     const onSubmit = async (values: NewItemFormSchamaType) => {
-        console.log(values);
+        devLog(values, "log");
 
         const { images } = values;
         await uploadImages(images);
-
+        setOpenModal(false);
     };
 
 
