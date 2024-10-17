@@ -1,6 +1,6 @@
-import { MenuItem, Restaurant } from "@prisma/client";
+import { MenuItemWithImages, MenuWithItems } from "./restaurant";
 
-import { MenuWithItems } from "./restaurant";
+import { Restaurant } from "@prisma/client";
 
 export type RestaurantStore = {
     restaurants: Restaurant[];
@@ -14,7 +14,7 @@ export type MenuStore = {
     addMenu: (menu: MenuWithItems) => void;
     removeMenu: (menuId: string) => void;
     updateMenu: (menuId: string, updatedMenu: MenuWithItems) => void;
-    addMenuItem: (menuId: string, newMenuItem: MenuItem) => void;
+    addMenuItem: (menuId: string, newMenuItem: MenuItemWithImages) => void;
     removeMenuItem: (menuId: string, menuItemId: string) => void;
-    updateMenuItem: (menuId: string, menuItemId: string, updatedMenuItem: MenuItem) => void;
+    updateMenuItem: (menuId: string, menuItemId: string, updatedMenuItem: MenuItemWithImages) => void;
 };

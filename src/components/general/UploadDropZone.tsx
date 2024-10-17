@@ -5,12 +5,11 @@ import { cn } from "@/lib/utils";
 
 type DropZoneProps = {
     isUploading: boolean;
-    // eslint-disable-next-line no-unused-vars
     handleUpload: (acceptedFile: File[]) => Promise<void>;
-    // eslint-disable-next-line no-unused-vars
     handleError: (fileRejections: FileRejection[]) => void;
     maxDocumentSize: number;
     multiple: boolean;
+    className?: string;
 }
 
 const UploadDropZone: React.FC<DropZoneProps> = ({
@@ -18,7 +17,8 @@ const UploadDropZone: React.FC<DropZoneProps> = ({
     maxDocumentSize,
     handleUpload,
     handleError,
-    multiple
+    multiple,
+    className
 }) => {
 
     const acceptedFileTypes = {
@@ -42,7 +42,8 @@ const UploadDropZone: React.FC<DropZoneProps> = ({
                     {...getRootProps()}
                     className={cn(
                         "m-4 h-60 rounded-lg border-2  border-dashed border-gray-300",
-                        isUploading && "animate-pulse"
+                        isUploading && "animate-pulse",
+                        className
                     )}
                 >
                     <div className="flex h-full w-full items-center justify-center">

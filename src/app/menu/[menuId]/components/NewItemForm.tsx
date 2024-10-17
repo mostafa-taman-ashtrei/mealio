@@ -10,10 +10,15 @@ import { FileRejection } from "react-dropzone";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Toggle } from "@/components/ui/toggle";
 import UploadDropZone from "@/components/general/UploadDropZone";
+import createNewMenuItem from "@/services/menu/createNewMenuItem";
 import { devLog } from "@/lib/utils";
-import { toast } from "sonner";
+import { toast as soonerToast } from "sonner";
+import { toast } from "@/hooks/use-toast";
+import uploadImagesToCloudinary from "@/services/upload/uploadImage";
 import { useForm } from "react-hook-form";
+import useMenu from "@/hooks/useMenu";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 type NewItemFormProps = {
@@ -21,6 +26,7 @@ type NewItemFormProps = {
 }
 
 const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
+    const { menus, addMenuItem } = useMenu();
     const [isUploading, setIsUploading] = useState(false);
 
     const form = useForm<NewItemFormSchamaType>({
@@ -29,7 +35,8 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
             name: "",
             description: "",
             images: [],
-            price: 0
+            price: 0,
+            menu: menus && menus.length > 0 ? menus[0].id : "",
         }
     });
 
@@ -45,21 +52,15 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
                 formData.append("images", file);
             });
 
-            const response = await fetch("/api/upload", {
-                method: "POST",
-                body: formData,
-            });
+            const res = await uploadImagesToCloudinary(formData);
+            const { data, error, status } = res;
 
-            if (!response.ok) throw new Error("Failed to upload images");
-
-            const data = await response.json();
-
+            if (status === 500 || error) throw new Error("Failed to upload images");
             if (!data.results && !Array.isArray(data.results)) throw new Error("Failed To Upload Images");
 
             return data;
         } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error("Error uploading images:", error);
+            devLog(error, "error");
         } finally {
             setIsUploading(false);
         }
@@ -91,7 +92,7 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
     const handleDropError = (fileRejections: FileRejection[]) => {
         fileRejections.forEach((rejection) => {
             rejection.errors.forEach((error) => {
-                toast(
+                soonerToast(
                     `File ${rejection.file.name} error: ${error.message}`,
                     {
                         duration: 2000,
@@ -109,17 +110,38 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
 
 
     const onSubmit = async (values: NewItemFormSchamaType) => {
-        devLog(values, "log");
+        try {
+            const { images, menu, name, price, description } = values;
+            const cloudinaryImages = await uploadImages(images);
 
-        const { images } = values;
-        await uploadImages(images);
-        setOpenModal(false);
+            if (!cloudinaryImages || cloudinaryImages.results.length < 0) return toast({ title: "Something Went Wrong!", variant: "destructive" });
+
+            const imageUrls = cloudinaryImages.results.map((image) => image.secure_url);
+
+            const { data, error, status } = await createNewMenuItem(
+                menu,
+                { name, description: description || null, price, imageUrls }
+            );
+
+
+            if (status === 500 || error) return toast({ title: "Failed to create menu item", variant: "destructive" });
+
+            if (status === 201) {
+                toast({ title: `${data.name} created successfully` });
+                addMenuItem(menu, data);
+                setOpenModal(false);
+            }
+
+        } catch (error) {
+            devLog(error, "error");
+            throw new Error("Failed to create menu");
+        }
     };
 
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 w-full">
                 <FormField
                     control={form.control}
                     name="images"
@@ -161,6 +183,7 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
                                 isUploading={isUploading}
                                 maxDocumentSize={2 * 1024 * 1024}
                                 multiple
+                                className="h-56"
                             />
                         </FormItem>
                     )}
@@ -209,6 +232,37 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
                         )}
                     />
                 </div>
+
+                <FormField
+                    control={form.control}
+                    name="menu"
+                    render={({ field }) => (
+                        <FormItem>
+                            <div className="flex flex-row items-center justify-start gap-4">
+                                <FormLabel>Menu</FormLabel>
+                                <FormMessage />
+                            </div>
+
+
+                            <FormControl>
+                                <div className="flex overflow-x-auto space-x-2 p-2 max-w-md">
+                                    {menus.map((menu, index) => (
+                                        <div key={menu.id} className={`flex-none ${index >= 2 ? "ml-2" : ""}`}>
+                                            <Toggle
+                                                disabled={loading}
+                                                pressed={field.value === menu.id}
+                                                onPressedChange={() => field.onChange(menu.id)}
+                                                className="flex flex-col items-center justify-between rounded-full border-2 border-muted bg-popover p-2 hover:bg-accent hover:text-accent-foreground data-[state=on]:bg-primary"
+                                            >
+                                                {menu.name}
+                                            </Toggle>
+                                        </div>
+                                    ))}
+                                </div>
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
 
                 <FormField
                     control={form.control}

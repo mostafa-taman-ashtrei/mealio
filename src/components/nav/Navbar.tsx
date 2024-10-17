@@ -15,15 +15,15 @@ import { usePathname } from "next/navigation";
 
 const NavRoutes: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
     const pathname = usePathname();
-    const routes = createNavRoutes(pathname);
     const { isSignedIn, isLoaded } = useAuth();
+    const routes = createNavRoutes(pathname, isSignedIn ? isSignedIn : false);
 
     return (
         <div className="px-4 mx-auto max-w-7xl sm:px-6 pb-3">
             <div className="relative pt-6">
                 <nav className="relative flex items-center justify-between sm:h-10 md:justify-center" aria-label="Global">
                     <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
-                        <Link href="/">
+                        <Link href={isSignedIn ? "/dashboard" : "/"}>
                             <Image
                                 alt="mealio logo"
                                 src={Logo}
