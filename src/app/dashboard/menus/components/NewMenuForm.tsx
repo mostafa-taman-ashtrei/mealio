@@ -12,7 +12,6 @@ import createNewMenu from "@/services/menu/createNewMenu";
 import { devLog } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
-import useMenu from "@/hooks/useMenu";
 import useRestaurant from "@/hooks/useRestaurant";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -21,8 +20,9 @@ type NewMenuFormProps = {
 }
 
 const NewMenuForm: React.FC<NewMenuFormProps> = ({ setOpenModal }) => {
-    const { restaurants } = useRestaurant();
-    const { addMenu } = useMenu();
+    const { restaurants, addMenu } = useRestaurant();
+
+    const restaurantId = restaurants[0].id;
 
     const form = useForm<NewMenuFormSchemaType>({
         resolver: zodResolver(NewMenuFormSchema),
@@ -49,7 +49,7 @@ const NewMenuForm: React.FC<NewMenuFormProps> = ({ setOpenModal }) => {
 
             if (status === 201) {
                 toast({ title: "Restaurant created successfully" });
-                addMenu(data);
+                addMenu(restaurantId, data);
                 setOpenModal(false);
             }
 

@@ -15,7 +15,17 @@ export const GET = async (req: NextApiRequest) => {
 
         const user = await prisma.user.findUnique({
             where: { clerkId: userId },
-            include: { restaurants: true },
+            include: {
+                restaurants: {
+                    include: {
+                        menus: {
+                            include: {
+                                menuItems: true,
+                            }
+                        }
+                    }
+                }
+            },
         });
 
         return NextResponse.json({ user }, { status: 200 });

@@ -18,7 +18,7 @@ import { toast as soonerToast } from "sonner";
 import { toast } from "@/hooks/use-toast";
 import uploadImagesToCloudinary from "@/services/upload/uploadImage";
 import { useForm } from "react-hook-form";
-import useMenu from "@/hooks/useMenu";
+import useRestaurant from "@/hooks/useRestaurant";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 type NewItemFormProps = {
@@ -26,8 +26,11 @@ type NewItemFormProps = {
 }
 
 const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
-    const { menus, addMenuItem } = useMenu();
+    const { addMenuItem, restaurants } = useRestaurant();
     const [isUploading, setIsUploading] = useState(false);
+
+    const menus = restaurants[0].menus;
+    const restaurantId = restaurants[0].id;
 
     const form = useForm<NewItemFormSchamaType>({
         resolver: zodResolver(NewItemFormSchama),
@@ -128,7 +131,7 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
 
             if (status === 201) {
                 toast({ title: `${data.name} created successfully` });
-                addMenuItem(menu, data);
+                addMenuItem(restaurantId, menu, data);
                 setOpenModal(false);
             }
 

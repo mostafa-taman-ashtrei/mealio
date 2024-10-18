@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
-
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { devLog } from "@/lib/utils";
 
 const prisma = new PrismaClient();
 
@@ -32,8 +31,6 @@ export const POST = async (req: Request) => {
             userId = userExists.id;
         }
 
-
-
         const newRestaurant = await prisma.restaurant.create({
             data: {
                 name: restaurantData.name,
@@ -41,12 +38,19 @@ export const POST = async (req: Request) => {
                 logoUrl: restaurantData.logoUrl,
                 ownerId: userId
             },
+            include: {
+                menus: {
+                    include: {
+                        menuItems: true,
+                    }
+                }
+            }
         });
 
         return NextResponse.json(newRestaurant, { status: 201 });
 
     } catch (error) {
-        console.error("Error creating restaurant:", error);
+        devLog(`Error creating restaurant: ${error}`, "error", "api");
         return NextResponse.json({ error: "Error creating restaurant" }, { status: 500 });
     }
 };

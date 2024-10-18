@@ -1,5 +1,6 @@
 import "./globals.css";
 
+import AuthWrapper from "@/components/general/AuthWrapper";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import NavBar from "@/components/nav/Navbar";
@@ -35,10 +36,12 @@ const RootLayout = ({ children }: RootLayoutProps) => {
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <NextThemeProvider>
-            <NavBar />
-            {children}
-            <SoonerToaster />
-            <Toaster />
+            <AuthWrapper>
+              <NavBar />
+              {children}
+              <SoonerToaster />
+              <Toaster />
+            </AuthWrapper>
           </NextThemeProvider>
         </body>
       </html>

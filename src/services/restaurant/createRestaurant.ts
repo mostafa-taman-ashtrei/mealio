@@ -1,12 +1,12 @@
 import { NewRestaurantDataType } from "@/types/newData";
-import { Restaurant } from "@prisma/client";
+import { RestaurantWithMenus } from "@/types/restaurant";
 import axiosRequest from "@/services/axiosRequest";
 
 const createNewRestaurant = async (clerkId: string, restaurantData: NewRestaurantDataType) => {
     const res = await axiosRequest("api/restaurant", "post", { clerkId, restaurantData });
 
     const resData = {
-        data: res.data as Restaurant,
+        data: res.data as RestaurantWithMenus,
         error: res.error,
         status: res.status,
     };
