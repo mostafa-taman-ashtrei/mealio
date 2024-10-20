@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
+import { devLog } from "@/lib/utils";
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -40,7 +41,7 @@ export async function POST(request: Request) {
         }, { status: 200 });
 
     } catch (error) {
-        console.error("Error uploading images:", error);
+        devLog(`Failed to upload Images: ${error}`, "error", "api");
         return NextResponse.json({ error: "Failed to upload images" }, { status: 500 });
     }
 }

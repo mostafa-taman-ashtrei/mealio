@@ -1,10 +1,12 @@
-import { Loader, Pen, Trash } from "lucide-react";
+import { Loader, Pen, Trash, XCircle } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
+import BowlIcon from "@/assets/images/bowl.png";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ItemDetails from "./ItemDetails";
 import { MenuItemWithImages } from "@/types/restaurant";
+import UpdateItemForm from "./UpdateItemForm";
 import deleteMenuItem from "@/services/menu/deleteMenuItem";
 import { devLog } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
@@ -19,6 +21,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
     const { restaurants, removeMenuItem } = useRestaurant();
     const [isOpen, setIsOpen] = useState(false);
     const [isDeleting, setIsDeleteing] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const mainRestaurant = typeof restaurants !== "undefined" ? restaurants[0] : null;
 
@@ -43,6 +46,8 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
         }
     };
 
+    const handleUpdateMenuItem = () => setIsUpdating((state) => !state);
+
 
     return (
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -50,7 +55,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
                 <div className="w-full md:w-72 bg-secondary shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
                     <a href="#">
                         <Image
-                            src={item.images[0].url}
+                            src={item.images[0] ? item.images[0].url : BowlIcon}
                             width={1000}
                             height={1000}
                             alt={item.name}
@@ -75,8 +80,13 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
                         <Button
                             size="sm"
                             variant="ghost"
+                            onClick={handleUpdateMenuItem}
                         >
-                            <Pen className="h-4 w-4" />
+                            {
+                                isUpdating
+                                    ? <XCircle className="h-4 w-4" />
+                                    : <Pen className="h-4 w-4" />
+                            }
                         </Button>
 
                         <Button
@@ -84,6 +94,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
                             variant="ghost"
                             className=" text-red-500 hover:text-red-600"
                             onClick={handleDeleteMenuItem}
+                            disabled={isUpdating || isDeleting}
                         >
                             {
                                 isDeleting
@@ -94,7 +105,12 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
                     </div>
                 </SheetHeader>
 
-                <ItemDetails item={item} />
+                {
+                    isUpdating
+                        ? <UpdateItemForm item={item} setIsUpdating={setIsUpdating} setOpenModal={setIsOpen} />
+                        : <ItemDetails item={item} />
+                }
+
             </SheetContent>
         </Sheet>
     );

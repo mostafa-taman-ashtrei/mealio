@@ -16,3 +16,10 @@ export const devLog = (log: unknown, type: "log" | "error", env: "api" | "client
     console.error(log);
   }
 };
+
+
+export const getPublicIdFromUrl = (url: string): string => {
+  const regex = /\/v\d+\/(.+)\.\w+$/;
+  const match = url.match(regex);
+  return match ? match[1] : "";
+};

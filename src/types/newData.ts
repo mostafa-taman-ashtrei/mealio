@@ -17,3 +17,19 @@ export type NewMenuItemType = {
     price: number;
     imageUrls: string[];
 };
+
+type UpdatedImage = {
+    id: string;
+    url: string;
+    isNew: boolean;
+    isDeleted: boolean;
+};
+
+
+export type UpdateMenuItemData = {
+    name: string;
+    description?: string;
+    price: number;
+    menu: string;
+    images: UpdatedImage[];
+};
