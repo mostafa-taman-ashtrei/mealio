@@ -14,13 +14,16 @@ export const GET = async (req: NextApiRequest) => {
         if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
         const user = await prisma.user.findUnique({
-            where: { clerkId: userId },
+            where: { clerkId: userId, isDeleted: false },
             include: {
                 restaurants: {
+                    where: { isDeleted: false },
                     include: {
                         menus: {
+                            where: { isDeleted: false },
                             include: {
                                 menuItems: {
+                                    where: { isDeleted: false },
                                     include: {
                                         images: true
                                     }

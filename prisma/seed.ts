@@ -9,8 +9,8 @@ async function main() {
     const users = await prisma.user.createMany({
         data: [
             { id: "user1", clerkId: "clerkId1" },
-            { id: "user2", clerkId: "clerkId1" },
-            { id: "user3", clerkId: "clerkId1" },
+            { id: "user2", clerkId: "clerkId2" },
+            { id: "user3", clerkId: "clerkId3" },
         ],
     });
 

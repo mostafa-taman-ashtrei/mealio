@@ -1,8 +1,15 @@
-import { Pen, Trash } from "lucide-react";
+"use client";
+
+import { Loader, Pen, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { MenuWithItems } from "@/types/restaurant";
+import deleteMenu from "@/services/menu/deleteMenu";
+import { devLog } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
+import useRestaurant from "@/hooks/useRestaurant";
+import { useState } from "react";
 
 type MenuItemProps = {
     className?: string;
@@ -10,7 +17,32 @@ type MenuItemProps = {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ menu }) => {
+    const { restaurants, removeMenu } = useRestaurant();
+    const [isDeleting, setIsDeleteing] = useState(false);
+
     const { name, description, id } = menu;
+    const mainRestaurant = typeof restaurants !== "undefined" ? restaurants[0] : null;
+
+
+
+    const handleDeleteMenu = async () => {
+        try {
+            setIsDeleteing(true);
+            const { error, status } = await deleteMenu(menu.id);
+
+            if (status === 500 || error || mainRestaurant === null) return toast({ title: "Failed to create restaurant" });
+
+            if (status === 200) {
+                toast({ title: `${menu.name} deleted successfully` });
+                removeMenu(mainRestaurant.id, menu.id);
+            }
+
+        } catch (error) {
+            devLog(`Failed to delete menu: ${error}`, "error");
+        } finally {
+            setIsDeleteing(false);
+        }
+    };
 
     return (
         <li
@@ -52,8 +84,13 @@ const MenuItem: React.FC<MenuItemProps> = ({ menu }) => {
                         size="sm"
                         variant="ghost"
                         className=" text-red-500 hover:text-red-600"
+                        onClick={handleDeleteMenu}
                     >
-                        <Trash className="h-4 w-4" />
+                        {
+                            isDeleting
+                                ? <Loader className="animate-spin text-primary" />
+                                : <Trash className="h-4 w-4" />
+                        }
                     </Button>
                 </div>
             </div>

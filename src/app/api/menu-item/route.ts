@@ -37,3 +37,33 @@ export const POST = async (req: Request) => {
         return NextResponse.json({ error: "Error creating menu" }, { status: 500 });
     }
 };
+
+
+
+
+export const DELETE = async (req: Request) => {
+    try {
+        const body = await req.json();
+        const { itemId } = body;
+
+        if (!itemId) return NextResponse.json({ error: "Missing itemId" }, { status: 400 });
+
+        const deletedMenu = await prisma.menuItem.update({
+            where: {
+                id: itemId
+            },
+            data: {
+                isDeleted: true,
+                deletedAt: new Date()
+            },
+            include: {
+                images: true
+            }
+        });
+
+        return NextResponse.json(deletedMenu, { status: 200 });
+    } catch (error) {
+        devLog(`Error deleting menu item: ${error}`, "error", "api");
+        return NextResponse.json({ error: "Error deleting menu item" }, { status: 500 });
+    }
+};

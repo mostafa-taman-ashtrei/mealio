@@ -11,7 +11,7 @@ model User {
   id          String       @id @default(uuid()) // Clerk userId reference
   clerkId     String       @unique
   restaurants Restaurant[]
-  deletedd    Boolean      @default(false)
+  isDeleted   Boolean      @default(false)
   deletedAt   DateTime?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -25,7 +25,7 @@ model Restaurant {
   ownerId     String // Reference to Clerk user ID
   owner       User      @relation(fields: [ownerId], references: [id])
   menus       Menu[]
-  deletedd    Boolean   @default(false)
+  isDeleted   Boolean   @default(false)
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -38,7 +38,7 @@ model Menu {
   name         String
   description  String?
   menuItems    MenuItem[]
-  deletedd     Boolean    @default(false)
+  isDeleted    Boolean    @default(false)
   deletedAt    DateTime?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
@@ -53,7 +53,7 @@ model MenuItem {
   price       Float
   images      Image[]
   discounts   Discount[] // Optional: Items can have one or more discounts
-  deletedd    Boolean    @default(false)
+  isDeleted   Boolean    @default(false)
   deletedAt   DateTime?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -64,7 +64,7 @@ model Image {
   menuItemId String
   menuItem   MenuItem  @relation(fields: [menuItemId], references: [id])
   url        String
-  deletedd   Boolean   @default(false)
+  isDeleted  Boolean   @default(false)
   deletedAt  DateTime?
   createdAt  DateTime  @default(now())
 }
@@ -77,7 +77,7 @@ model Discount {
   description String?
   startDate   DateTime?
   endDate     DateTime?
-  deletedd    Boolean   @default(false)
+  isDeleted   Boolean   @default(false)
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

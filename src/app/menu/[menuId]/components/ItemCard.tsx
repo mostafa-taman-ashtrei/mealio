@@ -1,16 +1,51 @@
+import { Loader, Pen, Trash } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ItemDetails from "./ItemDetails";
 import { MenuItemWithImages } from "@/types/restaurant";
+import deleteMenuItem from "@/services/menu/deleteMenuItem";
+import { devLog } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
+import useRestaurant from "@/hooks/useRestaurant";
+import { useState } from "react";
 
 type ItemCardProps = {
     item: MenuItemWithImages;
 };
 
 const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
+    const { restaurants, removeMenuItem } = useRestaurant();
+    const [isOpen, setIsOpen] = useState(false);
+    const [isDeleting, setIsDeleteing] = useState(false);
+
+    const mainRestaurant = typeof restaurants !== "undefined" ? restaurants[0] : null;
+
+
+    const handleDeleteMenuItem = async () => {
+        try {
+            setIsDeleteing(true);
+            const { error, status } = await deleteMenuItem(item.id);
+
+            if (status === 500 || error || mainRestaurant === null) return toast({ title: "Failed to create restaurant" });
+
+            if (status === 200) {
+                toast({ title: `${item.name} deleted successfully` });
+                removeMenuItem(mainRestaurant.id, item.menuId, item.id);
+            }
+
+        } catch (error) {
+            devLog(`Failed to delete menu item: ${error}`, "error");
+        } finally {
+            setIsDeleteing(false);
+            setIsOpen(false);
+        }
+    };
+
+
     return (
-        <Sheet>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
                 <div className="w-full md:w-72 bg-secondary shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
                     <a href="#">
@@ -35,6 +70,28 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
             <SheetContent className="min-w-[500px] overflow-y-auto">
                 <SheetHeader>
                     <SheetTitle>{item.name}</SheetTitle>
+
+                    <div>
+                        <Button
+                            size="sm"
+                            variant="ghost"
+                        >
+                            <Pen className="h-4 w-4" />
+                        </Button>
+
+                        <Button
+                            size="sm"
+                            variant="ghost"
+                            className=" text-red-500 hover:text-red-600"
+                            onClick={handleDeleteMenuItem}
+                        >
+                            {
+                                isDeleting
+                                    ? <Loader className="animate-spin text-primary" />
+                                    : <Trash className="h-4 w-4" />
+                            }
+                        </Button>
+                    </div>
                 </SheetHeader>
 
                 <ItemDetails item={item} />
