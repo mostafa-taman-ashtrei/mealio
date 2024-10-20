@@ -6,10 +6,8 @@ const MenuPage = () => {
     return (
         <Container>
             <PageTitle text="Menu Gallery" />
-
-            <MenuGrid menuName="Breakfast Menu" />
+            <MenuGrid />
         </Container>
-
     );
 };
 

@@ -20,7 +20,11 @@ export const GET = async (req: NextApiRequest) => {
                     include: {
                         menus: {
                             include: {
-                                menuItems: true,
+                                menuItems: {
+                                    include: {
+                                        images: true
+                                    }
+                                },
                             }
                         }
                     }

@@ -18,6 +18,7 @@ import { toast as soonerToast } from "sonner";
 import { toast } from "@/hooks/use-toast";
 import uploadImagesToCloudinary from "@/services/upload/uploadImage";
 import { useForm } from "react-hook-form";
+import { useParams } from "next/navigation";
 import useRestaurant from "@/hooks/useRestaurant";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -28,9 +29,9 @@ type NewItemFormProps = {
 const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
     const { addMenuItem, restaurants } = useRestaurant();
     const [isUploading, setIsUploading] = useState(false);
+    const params = useParams();
 
-    const menus = restaurants[0].menus;
-    const restaurantId = restaurants[0].id;
+    const mainRestaurant = typeof restaurants !== "undefined" ? restaurants[0] : null;
 
     const form = useForm<NewItemFormSchamaType>({
         resolver: zodResolver(NewItemFormSchama),
@@ -39,7 +40,7 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
             description: "",
             images: [],
             price: 0,
-            menu: menus && menus.length > 0 ? menus[0].id : "",
+            menu: typeof params.menuId === "string" ? params.menuId : "",
         }
     });
 
@@ -117,7 +118,7 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
             const { images, menu, name, price, description } = values;
             const cloudinaryImages = await uploadImages(images);
 
-            if (!cloudinaryImages || cloudinaryImages.results.length < 0) return toast({ title: "Something Went Wrong!", variant: "destructive" });
+            if (!cloudinaryImages || cloudinaryImages.results.length < 0 || !mainRestaurant) return toast({ title: "Something Went Wrong!", variant: "destructive" });
 
             const imageUrls = cloudinaryImages.results.map((image) => image.secure_url);
 
@@ -131,7 +132,7 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
 
             if (status === 201) {
                 toast({ title: `${data.name} created successfully` });
-                addMenuItem(restaurantId, menu, data);
+                addMenuItem(mainRestaurant.id, menu, data);
                 setOpenModal(false);
             }
 
@@ -249,7 +250,7 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
 
                             <FormControl>
                                 <div className="flex overflow-x-auto space-x-2 p-2 max-w-md">
-                                    {menus.map((menu, index) => (
+                                    {mainRestaurant && mainRestaurant.menus.map((menu, index) => (
                                         <div key={menu.id} className={`flex-none ${index >= 2 ? "ml-2" : ""}`}>
                                             <Toggle
                                                 disabled={loading}

@@ -16,22 +16,22 @@ const AuthWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { toast } = useToast();
     const { setRestaurants, clearData } = useRestaurant();
     const [justSignedIn, setJustSignedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
 
     useEffect(() => {
         if (!isLoaded) return;
 
-        if (isSignedIn && !justSignedIn) {
-            setJustSignedIn(true);
-        } else if (!isSignedIn) {
-            setJustSignedIn(false);
-        }
+        if (isSignedIn && !justSignedIn) setJustSignedIn(true);
+        else if (!isSignedIn) setJustSignedIn(false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSignedIn, isLoaded]);
 
     useEffect(() => {
         const checkUserStatus = async () => {
             if (isLoaded && isSignedIn) {
                 try {
+                    setIsLoading(true);
                     const { user, error, status } = await getUserData();
 
                     if (status === 401) return router.push("/sign-in");
@@ -44,21 +44,26 @@ const AuthWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     if (user && user.restaurants.length === 0 || !user) router.push("/new-restaurant");
                     else {
                         setRestaurants(user.restaurants);
-                        // setMenus(user.restaurants[0].menus);
                         if (justSignedIn) router.push("/dashboard");
                     }
 
                 } catch (error) {
                     devLog(`Failed to check user status ${error}`, "log");
                     throw new Error("Failed to check user status");
+                } finally {
+                    setIsLoading(false);
                 }
-            } else clearData();
+            } else {
+                clearData();
+                setIsLoading(false);
+            }
         };
 
         checkUserStatus();
-    }, [isLoaded, isSignedIn, router, toast]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLoaded, isSignedIn, router, toast, clearData]);
 
-    if (!isLoaded) return <Loader />;
+    if (!isLoaded || isLoading) return <Loader />;
 
     return <>{children}</>;
 };

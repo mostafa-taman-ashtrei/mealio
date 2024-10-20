@@ -1,27 +1,45 @@
-import BowlIcon from "@/assets/images/hero-burger.png";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+
 import Image from "next/image";
+import ItemDetails from "./ItemDetails";
+import { MenuItemWithImages } from "@/types/restaurant";
 
-const ItemCard: React.FC = () => {
+type ItemCardProps = {
+    item: MenuItemWithImages;
+};
+
+const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
     return (
-        <div
-            className="group relative cursor-pointer overflow-hidden  px-6 pt-10 pb-8  transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:mx-auto sm:max-w-sm sm:rounded-lg sm:px-10">
-            <span className="absolute top-10 z-0 h-40 w-40 rounded-full bg-primary transition-all duration-300 group-hover:scale-[10]" />
-            <div className="relative z-10 mx-auto max-w-md">
-                <span className="grid h-40 w-40 place-items-center rounded-full bg-primary transition-all duration-300 group-hover:bg-primary">
-                    <Image
-                        src={BowlIcon}
-                        width={1000}
-                        height={1000}
-                        alt="bowl icon"
-                        className="w-36 h-w-36 aspect-square rounded-full"
-                    />
-                </span>
+        <Sheet>
+            <SheetTrigger asChild>
+                <div className="w-full md:w-72 bg-secondary shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+                    <a href="#">
+                        <Image
+                            src={item.images[0].url}
+                            width={1000}
+                            height={1000}
+                            alt={item.name}
+                            className="h-72 w-full md:w-72 object-cover rounded-t-xl"
+                        />
 
-                <h4 className="text-xl  font-semibold tracking-tight w-40">
-                    Ramen Noodles
-                </h4>
-            </div>
-        </div>
+                        <div className="p-2 w-full md:w-72">
+                            <div className="flex flex-row justify-between items-center">
+                                <p className="text-lg font-bold  truncate block capitalize">{item.name}</p>
+                                <p className="text-lg font-semibold cursor-auto my-3">${item.price}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </SheetTrigger>
+
+            <SheetContent className="min-w-[500px] overflow-y-auto">
+                <SheetHeader>
+                    <SheetTitle>{item.name}</SheetTitle>
+                </SheetHeader>
+
+                <ItemDetails item={item} />
+            </SheetContent>
+        </Sheet>
     );
 };
 

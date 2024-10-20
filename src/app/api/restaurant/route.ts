@@ -41,7 +41,11 @@ export const POST = async (req: Request) => {
             include: {
                 menus: {
                     include: {
-                        menuItems: true,
+                        menuItems: {
+                            include: {
+                                images: true
+                            }
+                        }
                     }
                 }
             }

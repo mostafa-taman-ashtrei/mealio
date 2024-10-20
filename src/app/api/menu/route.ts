@@ -21,7 +21,11 @@ export const POST = async (req: Request) => {
                 restaurantId
             },
             include: {
-                menuItems: true,
+                menuItems: {
+                    include: {
+                        images: true
+                    }
+                },
             }
         });
 

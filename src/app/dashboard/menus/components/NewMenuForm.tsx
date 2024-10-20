@@ -21,8 +21,7 @@ type NewMenuFormProps = {
 
 const NewMenuForm: React.FC<NewMenuFormProps> = ({ setOpenModal }) => {
     const { restaurants, addMenu } = useRestaurant();
-
-    const restaurantId = restaurants[0].id;
+    const mainRestaurant = typeof restaurants !== "undefined" ? restaurants[0] : null;
 
     const form = useForm<NewMenuFormSchemaType>({
         resolver: zodResolver(NewMenuFormSchema),
@@ -36,7 +35,7 @@ const NewMenuForm: React.FC<NewMenuFormProps> = ({ setOpenModal }) => {
 
     const onSubmit = async (values: NewMenuFormSchemaType) => {
         try {
-            if (!restaurants || restaurants.length < 0) return toast({ title: "Something Went Wrong!", variant: "destructive" });
+            if (!restaurants || restaurants.length < 0 || mainRestaurant === null) return toast({ title: "Something Went Wrong!", variant: "destructive" });
 
 
             const { name, description } = values;
@@ -49,7 +48,7 @@ const NewMenuForm: React.FC<NewMenuFormProps> = ({ setOpenModal }) => {
 
             if (status === 201) {
                 toast({ title: "Restaurant created successfully" });
-                addMenu(restaurantId, data);
+                addMenu(mainRestaurant.id, data);
                 setOpenModal(false);
             }
 
