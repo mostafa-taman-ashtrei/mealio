@@ -8,20 +8,22 @@ type MenuGridItemProps = {
 
 const ManuItemsGrid: React.FC<MenuGridItemProps> = ({ items }) => {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-6 px-2 overflow-hidden">
-            <NewItemButton
-                className="h-full md:w-72"
-                variant="secondary"
-                text="Add New Item"
-                formType="item"
-            />
-
-            {items.map((item) => (
-                <ItemCard
-                    key={item.id}
-                    item={item}
+        <div className="flex justify-center w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 py-6 px-2 overflow-hidden w-11/12">
+                <NewItemButton
+                    className="h-full md:w-80"
+                    variant="secondary"
+                    text="Add New Item"
+                    formType="item"
                 />
-            ))}
+
+                {items.map((item) => (
+                    <ItemCard
+                        key={item.id}
+                        item={item}
+                    />
+                ))}
+            </div>
         </div>
     );
 };

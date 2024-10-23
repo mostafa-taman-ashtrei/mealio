@@ -1,10 +1,11 @@
 "use client";
 
-import { Loader, Pen, Trash } from "lucide-react";
+import { Loader, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { MenuWithItems } from "@/types/restaurant";
+import UpdateMenuButton from "./UpdateMenuButton";
 import deleteMenu from "@/services/menu/deleteMenu";
 import { devLog } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
@@ -72,13 +73,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ menu }) => {
             <div className="mt-4 flex flex-row items-center justify-between px-2 py-2  text-xs text-zinc-500">
                 <p>{description}</p>
 
-                <div>
-                    <Button
-                        size="sm"
-                        variant="ghost"
-                    >
-                        <Pen className="h-4 w-4" />
-                    </Button>
+                <div className="flex items-center space-x-2">
+                    <UpdateMenuButton menu={menu} variant="ghost" />
 
                     <Button
                         size="sm"
@@ -94,7 +90,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menu }) => {
                     </Button>
                 </div>
             </div>
-        </li>
+        </li >
     );
 };
 

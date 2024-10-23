@@ -33,3 +33,9 @@ export type UpdateMenuItemData = {
     menu: string;
     images: UpdatedImage[];
 };
+
+
+export type UpdatedMenuDataType = {
+    name: string;
+    description: string | null;
+};

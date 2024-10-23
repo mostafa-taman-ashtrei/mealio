@@ -24,7 +24,7 @@ const MenuPage: React.FC<MenuPageProps> = ({ params }) => {
     if (!currentMenu) return null;
 
     return (
-        <Container className="px-10">
+        <Container className="">
             <PageTitle text="Menu Items" />
             <p className="text-gray-500">These are all your items in the {currentMenu.name} menu</p>
 
