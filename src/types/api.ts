@@ -1,4 +1,4 @@
-export type requestMethodType = "get" | "post" | "delete" | "put";
+export type requestMethodType = "get" | "post" | "delete" | "put" | "patch";
 
 export type CloudinaryUploadResponse = {
     message: string;

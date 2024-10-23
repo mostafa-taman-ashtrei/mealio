@@ -26,12 +26,16 @@ export const GET = async (req: NextApiRequest) => {
                                     where: { isDeleted: false },
                                     include: {
                                         images: true,
-                                        discounts: true
+                                        discounts: {
+                                            where: { isDeleted: false }
+                                        }
                                     }
                                 },
                             }
                         },
-                        discounts: true
+                        discounts: {
+                            where: { isDeleted: false }
+                        }
                     }
                 }
             },

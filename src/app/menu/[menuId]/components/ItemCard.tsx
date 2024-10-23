@@ -1,5 +1,6 @@
 import { Loader, Pen, Trash, XCircle } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { cn, devLog } from "@/lib/utils";
 
 import BowlIcon from "@/assets/images/bowl.png";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,6 @@ import ItemDetails from "./ItemDetails";
 import { MenuItemWithImages } from "@/types/restaurant";
 import UpdateItemForm from "./UpdateItemForm";
 import deleteMenuItem from "@/services/menu/deleteMenuItem";
-import { devLog } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import useRestaurant from "@/hooks/useRestaurant";
 import { useState } from "react";
@@ -76,10 +76,13 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
                 <SheetHeader>
                     <SheetTitle>{item.name}</SheetTitle>
 
-                    <div>
+                    <div className={cn(
+                        "w-full flex flex-row gap-4 items-center justify-between",
+                        item.images.length > 1 && "p-5"
+                    )}>
                         <Button
-                            size="sm"
-                            variant="ghost"
+                            className="w-full"
+                            variant="secondary"
                             onClick={handleUpdateMenuItem}
                         >
                             {
@@ -90,9 +93,8 @@ const ItemCard: React.FC<ItemCardProps> = ({ item }) => {
                         </Button>
 
                         <Button
-                            size="sm"
-                            variant="ghost"
-                            className=" text-red-500 hover:text-red-600"
+                            variant="destructive"
+                            className="w-full"
                             onClick={handleDeleteMenuItem}
                             disabled={isUpdating || isDeleting}
                         >

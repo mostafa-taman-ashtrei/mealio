@@ -48,7 +48,9 @@ export const POST = async (req: Request) => {
                         }
                     }
                 },
-                discounts: true
+                discounts: {
+                    where: { isDeleted: false }
+                }
             }
         });
 

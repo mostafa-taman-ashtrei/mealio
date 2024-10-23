@@ -15,12 +15,10 @@ export type RestaurantStore = {
     addMenuItem: (restaurantId: string, menuId: string, newMenuItem: MenuItemWithImages) => void;
     removeMenuItem: (restaurantId: string, menuId: string, menuItemId: string) => void;
     updateMenuItem: (restaurantId: string, menuId: string, menuItemId: string, updatedMenuItem: MenuItemWithImages) => void;
-
     addMenuItemDiscount: (restaurantId: string, menuItemIds: string[], discount: Omit<Discount, "menuItemId">) => void;
-    // addMenuItemDiscount: (restaurantId: string, menuId: string, menuItemIds: string[], discount: Omit<Discount, "menuItemId">) => void;
-    updateMenuItemDiscount: (restaurantId: string, menuId: string, discountId: string, data: Partial<Discount>) => void;
+    updateMenuItemDiscount: (restaurantId: string, discountId: string, data: Partial<Discount>) => void;
     removeMenuItemDiscount: (restaurantId: string, menuId: string, discountId: string) => void;
-
+    removeDiscountFromAllItems: (restaurantId: string, discountId: string) => void;
 
     addRestaurantDiscount: (restaurantId: string, discountData: Discount) => void;
     updateRestaurantDiscount: (restaurantId: string, discountId: string, data: Partial<Discount>) => void;

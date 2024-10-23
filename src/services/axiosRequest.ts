@@ -1,4 +1,5 @@
 import axios from "axios";
+import { devLog } from "@/lib/utils";
 import { requestMethodType } from "@/types/api";
 
 const axiosRequest = async (
@@ -16,16 +17,15 @@ const axiosRequest = async (
             return { data: res.data, status: res.status, error: null };
         }
 
-        else if (requestMethod === "post" || requestMethod === "put") {
-            const res = await axios({ url, method: requestMethod === "post" ? "POST" : "PUT", data });
+        else if (requestMethod === "post" || requestMethod === "put" || requestMethod === "patch") {
+            const res = await axios({ url, method: requestMethod === "post" ? "POST" : requestMethod === "patch" ? "PATCH" : "PUT", data });
             if (res.data.error) return { data: null, error: res.data.error, status: 400 };
             return { data: res.data, status: res.status, error: null };
         }
 
         return { data: null, status: 400, error: "Bad Request" };
     } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+        devLog(`Error in axiosRequest: ${error}`, "error");
         return { data: null, status: 500, error: "Server Error" };
     }
 };

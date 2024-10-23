@@ -88,27 +88,24 @@ const useRestaurant = create(
             }));
         },
 
-        updateMenuItemDiscount: (restaurantId, menuId, discountId, data) => {
+        updateMenuItemDiscount: (restaurantId, discountId, data) => {
             set((state) => ({
+                ...state,
                 restaurants: state.restaurants?.map(restaurant =>
                     restaurant.id === restaurantId
                         ? {
                             ...restaurant,
-                            menus: restaurant.menus.map(menu =>
-                                menu.id === menuId
-                                    ? {
-                                        ...menu,
-                                        menuItems: menu.menuItems.map(item => ({
-                                            ...item,
-                                            discounts: item.discounts.map(discount =>
-                                                discount.id === discountId
-                                                    ? { ...discount, ...data }
-                                                    : discount
-                                            )
-                                        }))
-                                    }
-                                    : menu
-                            )
+                            menus: restaurant.menus.map(menu => ({
+                                ...menu,
+                                menuItems: menu.menuItems.map(item => ({
+                                    ...item,
+                                    discounts: item.discounts.map(discount =>
+                                        discount.id === discountId
+                                            ? { ...discount, ...data }
+                                            : discount
+                                    )
+                                }))
+                            }))
                         }
                         : restaurant
                 )
@@ -137,6 +134,27 @@ const useRestaurant = create(
                 )
             }));
         },
+
+        removeDiscountFromAllItems: (restaurantId, discountId) => {
+            set((state) => ({
+                ...state,
+                restaurants: state.restaurants?.map(restaurant =>
+                    restaurant.id === restaurantId
+                        ? {
+                            ...restaurant,
+                            menus: restaurant.menus.map(menu => ({
+                                ...menu,
+                                menuItems: menu.menuItems.map(item => ({
+                                    ...item,
+                                    discounts: item.discounts.filter(d => d.id !== discountId)
+                                }))
+                            }))
+                        }
+                        : restaurant
+                )
+            }));
+        },
+
 
         // Restaurant Discount Methods
         addRestaurantDiscount: (restaurantId, discount) => {

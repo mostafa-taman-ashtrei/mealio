@@ -23,7 +23,9 @@ export const POST = async (req: Request) => {
                 menuItems: {
                     include: {
                         images: true,
-                        discounts: true
+                        discounts: {
+                            where: { isDeleted: false }
+                        }
                     }
                 },
             },

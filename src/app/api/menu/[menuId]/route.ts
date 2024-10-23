@@ -28,7 +28,9 @@ export const PUT = async (req: Request, { params }: { params: { menuId: string }
                 menuItems: {
                     include: {
                         images: true,
-                        discounts: true
+                        discounts: {
+                            where: { isDeleted: false }
+                        }
                     }
                 },
             },

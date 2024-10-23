@@ -27,7 +27,9 @@ export const POST = async (req: Request) => {
             },
             include: {
                 images: true,
-                discounts: true
+                discounts: {
+                    where: { isDeleted: false }
+                }
             }
         });
 
@@ -59,7 +61,9 @@ export const DELETE = async (req: Request) => {
             },
             include: {
                 images: true,
-                discounts: true
+                discounts: {
+                    where: { isDeleted: false }
+                }
             }
         });
 
