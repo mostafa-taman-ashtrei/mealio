@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
+import NewDiscountForm from "@/app/dashboard/discounts/components/NewDiscountForm";
 import { NewFormType } from "@/types/ui";
 import NewItemForm from "@/app/menu/[menuId]/components/NewItemForm";
 import NewMenuForm from "@/app/dashboard/menus/components/NewMenuForm";
@@ -27,7 +28,9 @@ const NewItemButton: React.FC<NewMenuButtonProps> = ({ className, variant, text,
     const [openModal, setOpenModal] = useState(false);
     const form = formType === "menu"
         ? <NewMenuForm setOpenModal={setOpenModal} />
-        : <NewItemForm setOpenModal={setOpenModal} />;
+        : formType === "discount"
+            ? <NewDiscountForm setOpenModal={setOpenModal} />
+            : <NewItemForm setOpenModal={setOpenModal} />;
 
     return (
         <Dialog open={openModal} onOpenChange={setOpenModal}>

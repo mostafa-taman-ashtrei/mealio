@@ -22,7 +22,8 @@ export const POST = async (req: Request) => {
             include: {
                 menuItems: {
                     include: {
-                        images: true
+                        images: true,
+                        discounts: true
                     }
                 },
             },

@@ -152,20 +152,24 @@ async function main() {
             {
                 id: "discount1",
                 menuItemId: "menuItem1",
-                percentage: 10,
+                value: 10,
                 description: "10% off spicy curry for a limited time.",
                 startDate: new Date(),
                 endDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-
+                restaurantId: "restaurant1",
+                type: "PERCENTAGE",
+                name: "Halloween Special",
             },
             {
                 id: "discount2",
                 menuItemId: "menuItem3",
-                percentage: 15,
+                value: 15,
                 description: "15% off Fettuccine Alfredo on Wednesdays.",
                 startDate: new Date(),
                 endDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-
+                restaurantId: "restaurant1",
+                type: "PERCENTAGE",
+                name: "Fettuccine Special",
             },
         ],
     });

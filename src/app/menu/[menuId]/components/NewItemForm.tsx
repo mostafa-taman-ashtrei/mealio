@@ -256,7 +256,7 @@ const NewItemForm: React.FC<NewItemFormProps> = ({ setOpenModal }) => {
                                                 disabled={loading}
                                                 pressed={field.value === menu.id}
                                                 onPressedChange={() => field.onChange(menu.id)}
-                                                className="flex flex-col items-center justify-between rounded-full border-2 border-muted bg-popover p-2 hover:bg-accent hover:text-accent-foreground data-[state=on]:bg-primary"
+                                                className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-2 hover:bg-accent hover:text-accent-foreground data-[state=on]:bg-primary"
                                             >
                                                 {menu.name}
                                             </Toggle>

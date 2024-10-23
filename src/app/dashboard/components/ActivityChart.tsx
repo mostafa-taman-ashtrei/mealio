@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/chart";
 import { TrendingUp } from "lucide-react";
 
-export const description = "A bar chart with a label"
+export const description = "A bar chart with a label";
 const chartData = [
     { month: "January", hits: 186 },
     { month: "February", hits: 305 },
@@ -31,14 +31,14 @@ const chartData = [
     { month: "October", hits: 220 },
     { month: "November", hits: 170 },
     { month: "December", hits: 310 },
-]
+];
 
 const chartConfig = {
     hits: {
         label: "Hits",
         color: "hsl(var(--primary))",
     },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 
 const ActivityChart: React.FC = () => {

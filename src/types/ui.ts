@@ -1,4 +1,4 @@
-export type NewFormType = "menu" | "item";
+export type NewFormType = "menu" | "item" | "discount";
 
 export type CloudinaryAsset = {
     asset_id: string;

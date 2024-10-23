@@ -60,6 +60,125 @@ const useRestaurant = create(
             )
         })),
 
+
+
+
+
+        addMenuItemDiscount: (restaurantId, menuItemIds, discount) => {
+            set((state) => ({
+                ...state,
+                restaurants: state.restaurants?.map(restaurant =>
+                    restaurant.id === restaurantId
+                        ? {
+                            ...restaurant,
+                            menus: restaurant.menus.map(menu => ({
+                                ...menu,
+                                menuItems: menu.menuItems.map(item =>
+                                    menuItemIds.includes(item.id)
+                                        ? {
+                                            ...item,
+                                            discounts: [...item.discounts, { ...discount, menuItemId: item.id }]
+                                        }
+                                        : item
+                                )
+                            }))
+                        }
+                        : restaurant
+                )
+            }));
+        },
+
+        updateMenuItemDiscount: (restaurantId, menuId, discountId, data) => {
+            set((state) => ({
+                restaurants: state.restaurants?.map(restaurant =>
+                    restaurant.id === restaurantId
+                        ? {
+                            ...restaurant,
+                            menus: restaurant.menus.map(menu =>
+                                menu.id === menuId
+                                    ? {
+                                        ...menu,
+                                        menuItems: menu.menuItems.map(item => ({
+                                            ...item,
+                                            discounts: item.discounts.map(discount =>
+                                                discount.id === discountId
+                                                    ? { ...discount, ...data }
+                                                    : discount
+                                            )
+                                        }))
+                                    }
+                                    : menu
+                            )
+                        }
+                        : restaurant
+                )
+            }));
+        },
+
+        removeMenuItemDiscount: (restaurantId, menuId, discountId) => {
+            set((state) => ({
+                restaurants: state.restaurants?.map(restaurant =>
+                    restaurant.id === restaurantId
+                        ? {
+                            ...restaurant,
+                            menus: restaurant.menus.map(menu =>
+                                menu.id === menuId
+                                    ? {
+                                        ...menu,
+                                        menuItems: menu.menuItems.map(item => ({
+                                            ...item,
+                                            discounts: item.discounts.filter(d => d.id !== discountId)
+                                        }))
+                                    }
+                                    : menu
+                            )
+                        }
+                        : restaurant
+                )
+            }));
+        },
+
+        // Restaurant Discount Methods
+        addRestaurantDiscount: (restaurantId, discount) => {
+            set((state) => ({
+                restaurants: state.restaurants?.map(restaurant =>
+                    restaurant.id === restaurantId
+                        ? { ...restaurant, discounts: [...restaurant.discounts, discount] }
+                        : restaurant
+                )
+            }));
+        },
+
+        updateRestaurantDiscount: (restaurantId, discountId, data) => {
+            set((state) => ({
+                restaurants: state.restaurants?.map(restaurant =>
+                    restaurant.id === restaurantId
+                        ? {
+                            ...restaurant,
+                            discounts: restaurant.discounts.map(discount =>
+                                discount.id === discountId
+                                    ? { ...discount, ...data }
+                                    : discount
+                            )
+                        }
+                        : restaurant
+                )
+            }));
+        },
+
+        removeRestaurantDiscount: (restaurantId, discountId) => {
+            set((state) => ({
+                restaurants: state.restaurants?.map(restaurant =>
+                    restaurant.id === restaurantId
+                        ? {
+                            ...restaurant,
+                            discounts: restaurant.discounts.filter(d => d.id !== discountId)
+                        }
+                        : restaurant
+                )
+            }));
+        }
+
     }), {
         name: "restaurant-storage",
         storage: createJSONStorage(() => localStorage)

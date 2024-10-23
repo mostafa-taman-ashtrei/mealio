@@ -27,6 +27,7 @@ export const POST = async (req: Request) => {
             },
             include: {
                 images: true,
+                discounts: true
             }
         });
 
@@ -57,7 +58,8 @@ export const DELETE = async (req: Request) => {
                 deletedAt: new Date()
             },
             include: {
-                images: true
+                images: true,
+                discounts: true
             }
         });
 

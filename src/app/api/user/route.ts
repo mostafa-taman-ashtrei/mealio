@@ -25,11 +25,13 @@ export const GET = async (req: NextApiRequest) => {
                                 menuItems: {
                                     where: { isDeleted: false },
                                     include: {
-                                        images: true
+                                        images: true,
+                                        discounts: true
                                     }
                                 },
                             }
-                        }
+                        },
+                        discounts: true
                     }
                 }
             },

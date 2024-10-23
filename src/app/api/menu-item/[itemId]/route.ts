@@ -49,6 +49,7 @@ export const PUT = async (req: Request, { params }: { params: { itemId: string }
             },
             include: {
                 images: true,
+                discounts: true
             },
         });
 

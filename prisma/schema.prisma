@@ -18,17 +18,18 @@ model User {
 }
 
 model Restaurant {
-  id          String    @id @default(uuid())
+  id          String     @id @default(uuid())
   name        String
   description String?
   logoUrl     String?
   ownerId     String // Reference to Clerk user ID
-  owner       User      @relation(fields: [ownerId], references: [id])
+  owner       User       @relation(fields: [ownerId], references: [id])
   menus       Menu[]
-  isDeleted   Boolean   @default(false)
+  discounts   Discount[]
+  isDeleted   Boolean    @default(false)
   deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model Menu {
@@ -69,16 +70,26 @@ model Image {
   createdAt  DateTime  @default(now())
 }
 
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
 model Discount {
-  id          String    @id @default(uuid())
-  menuItemId  String?
-  menuItem    MenuItem? @relation(fields: [menuItemId], references: [id])
-  percentage  Float
-  description String?
-  startDate   DateTime?
-  endDate     DateTime?
-  isDeleted   Boolean   @default(false)
-  deletedAt   DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id           String       @id @default(uuid())
+  name         String
+  restaurantId String
+  restaurant   Restaurant   @relation(fields: [restaurantId], references: [id])
+  menuItemId   String?
+  menuItems    MenuItem[]
+  type         DiscountType
+  value        Float
+  isActive     Boolean      @default(true)
+  description  String?
+  startDate    DateTime
+  endDate      DateTime
+  isDeleted    Boolean      @default(false)
+  deletedAt    DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
