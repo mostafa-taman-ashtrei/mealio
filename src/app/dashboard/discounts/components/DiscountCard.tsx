@@ -5,6 +5,7 @@ import { cn, devLog } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Discount } from "@prisma/client";
 import DiscountDetails from "./DiscountDetails";
+import UpdateDiscountFrom from "./UpdateDiscountFrom";
 import deleteDiscount from "@/services/discounts/deleteDiscount";
 import { toast } from "@/hooks/use-toast";
 import useRestaurant from "@/hooks/useRestaurant";
@@ -112,14 +113,18 @@ const DiscountCard: React.FC<DiscountCardProps> = ({ discount }) => {
                         >
                             {
                                 isDeleting
-                                    ? <Loader className="animate-spin text-primary" />
+                                    ? <Loader className="animate-spin" />
                                     : <Trash className="h-4 w-4" />
                             }
                         </Button>
                     </div>
                 </DialogHeader>
 
-                <DiscountDetails discount={discount} />
+                {
+                    isUpdating
+                        ? <UpdateDiscountFrom setIsUpdating={setIsUpdating} setOpenModal={setOpenModal} discount={discount} />
+                        : <DiscountDetails discount={discount} />
+                }
             </DialogContent>
         </Dialog>
 

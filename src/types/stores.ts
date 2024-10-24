@@ -20,6 +20,7 @@ export type RestaurantStore = {
     removeMenuItemDiscount: (restaurantId: string, menuId: string, discountId: string) => void;
     removeDiscountFromAllItems: (restaurantId: string, discountId: string) => void;
 
+    updateDiscountWithItems: (restaurantId: string, discountId: string, updatedDiscount: Discount & { menuItems: MenuItemWithImages[] }) => void;
     addRestaurantDiscount: (restaurantId: string, discountData: Discount) => void;
     updateRestaurantDiscount: (restaurantId: string, discountId: string, data: Partial<Discount>) => void;
     removeRestaurantDiscount: (restaurantId: string, discountId: string) => void;

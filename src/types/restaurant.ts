@@ -13,3 +13,7 @@ export type RestaurantWithMenus = Restaurant & {
     })[]
     discounts: Discount[]
 };
+
+export type DiscountWithMenuItems = Discount & {
+    menuItems: MenuItemWithImages[]
+};

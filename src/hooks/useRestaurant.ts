@@ -156,6 +156,34 @@ const useRestaurant = create(
         },
 
 
+        updateDiscountWithItems: (restaurantId, discountId, updatedDiscount) => {
+            set((state) => ({
+                ...state,
+                restaurants: state.restaurants?.map(restaurant =>
+                    restaurant.id === restaurantId
+                        ? {
+                            ...restaurant,
+                            discounts: restaurant.discounts.map(discount =>
+                                discount.id === discountId
+                                    ? updatedDiscount
+                                    : discount
+                            ),
+                            menus: restaurant.menus.map(menu => ({
+                                ...menu,
+                                menuItems: menu.menuItems.map(item => ({
+                                    ...item,
+                                    discounts: updatedDiscount.menuItems.some(mi => mi.id === item.id)
+                                        ? [...item.discounts.filter(d => d.id !== discountId), updatedDiscount]
+                                        : item.discounts.filter(d => d.id !== discountId)
+                                }))
+                            }))
+                        }
+                        : restaurant
+                )
+            }));
+        },
+
+
         // Restaurant Discount Methods
         addRestaurantDiscount: (restaurantId, discount) => {
             set((state) => ({
