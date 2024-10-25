@@ -1,23 +1,22 @@
 "use client";
 
-import { initializeThemes, themeRegistry } from "@/lib/themes/themeRegistry";
-
 import { Eye } from "lucide-react";
-import { useEffect } from "react";
+import useMenuTheme from "@/hooks/useMenuTheme";
 import useRestaurant from "@/hooks/useRestaurant";
 import { useSearchParams } from "next/navigation";
 
 const PreviewPage = ({ params }: { params: { themeId: string } }) => {
     const searchParams = useSearchParams();
     const { restaurants } = useRestaurant();
+    const { getTheme } = useMenuTheme();
+
     const menuId = searchParams.get("menuId");
 
-    useEffect(() => { initializeThemes(); }, []);
-
     const mainRestaurant = typeof restaurants !== "undefined" && typeof restaurants[0] !== "undefined" ? restaurants[0] : null;
-    const selectedTheme = themeRegistry.get(params.themeId);
+    const selectedTheme = getTheme(params.themeId);
     const selectedMenu = mainRestaurant ? mainRestaurant.menus.find(m => m.id === menuId) : null;
 
+    console.log(selectedTheme);
     if (!selectedTheme || !selectedMenu) {
         return (
             <div className="flex items-center justify-center min-h-screen">

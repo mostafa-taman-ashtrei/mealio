@@ -1,15 +1,17 @@
 "use client";
 
-import { initializeThemes, themeRegistry } from "@/lib/themes/themeRegistry";
 import { useEffect, useState } from "react";
 
 import { MenuThemeType } from "@/types/theme";
 import { MenuWithItems } from "@/types/restaurant";
+import ThemeSkeleton from "@/components/skeletons/ThemeSkeleton";
 import getMenuData from "@/services/menu/getMenuData";
+import useMenuTheme from "@/hooks/useMenuTheme";
 import { useRouter } from "next/navigation";
 
 const MenuRedirect = ({ params }: { params: { menuId: string } }) => {
     const router = useRouter();
+    const { getTheme } = useMenuTheme();
 
     const [selectedMenu, setSelectedMenu] = useState<MenuWithItems | null>(null);
     const [selectedTheme, setSelectedTheme] = useState<MenuThemeType | null>(null);
@@ -25,23 +27,17 @@ const MenuRedirect = ({ params }: { params: { menuId: string } }) => {
                 if (!themeId) return router.push("/dashboard");
 
                 setSelectedMenu(data);
-                setSelectedTheme(themeRegistry.get(themeId) || null);
+                setSelectedTheme(getTheme(themeId) || null);
             }
 
             setLoading(false);
         };
 
-        initializeThemes();
         redirect();
     }, [params.menuId, router]);
 
 
-
-    if (loading) return (
-        <div className="min-h-screen flex items-center justify-center">
-            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary" />
-        </div>
-    );
+    if (loading) return <ThemeSkeleton />;
 
     if (selectedTheme === null || selectedMenu === null && !loading) {
         return (
@@ -50,8 +46,6 @@ const MenuRedirect = ({ params }: { params: { menuId: string } }) => {
             </div>
         );
     }
-
-
 
     const ThemeComponent = selectedTheme.component;
 

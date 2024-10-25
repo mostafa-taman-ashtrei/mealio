@@ -15,6 +15,11 @@ const createNavRoutes = (activeString: string, isSignedIn: boolean) => {
             label: "Discounts",
             active: activeString === "/dashboard/discounts",
         },
+        {
+            href: "/dashboard/themes",
+            label: "Theme Gallery",
+            active: activeString === "/dashboard/themes",
+        }
     ];
 
     return [

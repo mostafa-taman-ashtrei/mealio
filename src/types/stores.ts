@@ -1,6 +1,7 @@
-import { MenuItemWithImages, MenuWithItems, RestaurantWithMenus } from "./restaurant";
+import { MenuItemWithImages, MenuWithItems, RestaurantWithMenus } from "@/types/restaurant";
 
 import { Discount } from "@prisma/client";
+import { MenuThemeType } from "@/types/theme";
 
 export type RestaurantStore = {
     restaurants: RestaurantWithMenus[];
@@ -19,11 +20,19 @@ export type RestaurantStore = {
     updateMenuItemDiscount: (restaurantId: string, discountId: string, data: Partial<Discount>) => void;
     removeMenuItemDiscount: (restaurantId: string, menuId: string, discountId: string) => void;
     removeDiscountFromAllItems: (restaurantId: string, discountId: string) => void;
-
     updateDiscountWithItems: (restaurantId: string, discountId: string, updatedDiscount: Discount & { menuItems: MenuItemWithImages[] }) => void;
     addRestaurantDiscount: (restaurantId: string, discountData: Discount) => void;
     updateRestaurantDiscount: (restaurantId: string, discountId: string, data: Partial<Discount>) => void;
     removeRestaurantDiscount: (restaurantId: string, discountId: string) => void;
-
     updateMenuTheme: (restaurantId: string, menuId: string, themeId: string) => void;
 };
+
+
+export type MenuThemeStore = {
+    themes: MenuThemeType[];
+    selectedMenuId: string | null;
+    setSelectedMenu: (menuId: string | null) => void;
+    registerTheme: (theme: MenuThemeType) => void;
+    getTheme: (id: string) => MenuThemeType | undefined;
+    initializeThemes: () => void;
+}
