@@ -5,6 +5,7 @@ import { Link2, Loader, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { MenuWithItems } from "@/types/restaurant";
+import QrCodeButton from "./QrCodeButton";
 import UpdateMenuButton from "./UpdateMenuButton";
 import deleteMenu from "@/services/menu/deleteMenu";
 import { devLog } from "@/lib/utils";
@@ -53,6 +54,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ menu }) => {
         router.push(dynamicUrl);
     };
 
+
     return (
         <li
             className="col-span-1 divide-y divide-gray-400  hover:bg-primary hover:text-white duration-500 rounded-lg bg-gray-200 transition dark:divide-black dark:bg-zinc-900"
@@ -83,6 +85,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ menu }) => {
 
                 <div className="flex items-center space-x-2">
                     <UpdateMenuButton menu={menu} variant="ghost" />
+
+                    <QrCodeButton menu={menu} />
 
                     <Button
                         size="sm"

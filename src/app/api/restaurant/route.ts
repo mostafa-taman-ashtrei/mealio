@@ -41,6 +41,7 @@ export const POST = async (req: Request) => {
             include: {
                 menus: {
                     include: {
+                        qrcode: true,
                         menuItems: {
                             include: {
                                 images: true

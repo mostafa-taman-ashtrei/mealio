@@ -34,7 +34,7 @@ const MenuRedirect = ({ params }: { params: { menuId: string } }) => {
         };
 
         redirect();
-    }, [params.menuId, router]);
+    }, [getTheme, params.menuId, router]);
 
 
     if (loading) return <ThemeSkeleton />;

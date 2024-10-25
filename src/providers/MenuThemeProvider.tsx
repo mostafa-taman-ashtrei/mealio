@@ -10,7 +10,8 @@ type MenuThemeProviderProps = {
 const MenuThemeProvider: React.FC<MenuThemeProviderProps> = ({ children }) => {
     const { initializeThemes } = useMenuTheme();
 
-    useEffect(() => initializeThemes(), [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => initializeThemes(), []);
 
 
     return children;

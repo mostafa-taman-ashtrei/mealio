@@ -1,8 +1,7 @@
-import { BookOpenText, ChefHat, CirclePercent, Martini, Store } from "lucide-react";
+import { BookOpenText, CirclePercent, Store } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import NewItemButton from "@/components/general/NewItemButton";
 
 const PageGrid = () => {
     return (

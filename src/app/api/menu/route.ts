@@ -20,6 +20,7 @@ export const POST = async (req: Request) => {
                 restaurantId
             },
             include: {
+                qrcode: true,
                 menuItems: {
                     include: {
                         images: true,

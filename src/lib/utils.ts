@@ -23,3 +23,5 @@ export const getPublicIdFromUrl = (url: string): string => {
   const match = url.match(regex);
   return match ? match[1] : "";
 };
+
+export const generateDynamicMenuUrl = (menuId: string) => `${process.env.NEXT_PUBLIC_BASE_URL}/m/${menuId}`;

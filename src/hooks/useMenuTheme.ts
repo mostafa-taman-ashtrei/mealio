@@ -24,6 +24,7 @@ const useMenuTheme = create(
     }), {
         name: "menu-storage",
         storage: createJSONStorage(() => localStorage),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         merge: (persistedState: any, currentState) => ({
             ...currentState,
             themes: persistedState.themes.map((theme: Partial<MenuThemeType>) => ({

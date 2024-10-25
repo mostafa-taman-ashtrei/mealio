@@ -22,6 +22,7 @@ export const GET = async (req: NextApiRequest) => {
                         menus: {
                             where: { isDeleted: false },
                             include: {
+                                qrcode: true,
                                 menuItems: {
                                     where: { isDeleted: false },
                                     include: {

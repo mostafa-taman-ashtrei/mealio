@@ -16,6 +16,7 @@ export const PATCH = async (req: Request, { params }: { params: { menuId: string
             where: { id: menuId },
             data: { themeId },
             include: {
+                qrcode: true,
                 menuItems: {
                     include: {
                         images: true,

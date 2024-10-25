@@ -40,6 +40,7 @@ model Menu {
   description  String?
   menuItems    MenuItem[]
   themeId      String?
+  qrcode       QrCode?
   isDeleted    Boolean    @default(false)
   deletedAt    DateTime?
   createdAt    DateTime   @default(now())
@@ -93,4 +94,16 @@ model Discount {
   deletedAt    DateTime?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
+}
+
+model QrCode {
+  id        String    @id @default(uuid())
+  codeUrl   String
+  menuId    String    @unique
+  menu      Menu      @relation(fields: [menuId], references: [id])
+  isActive  Boolean   @default(true)
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }

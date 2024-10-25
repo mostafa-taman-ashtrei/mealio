@@ -16,7 +16,7 @@ const PreviewPage = ({ params }: { params: { themeId: string } }) => {
     const selectedTheme = getTheme(params.themeId);
     const selectedMenu = mainRestaurant ? mainRestaurant.menus.find(m => m.id === menuId) : null;
 
-    console.log(selectedTheme);
+
     if (!selectedTheme || !selectedMenu) {
         return (
             <div className="flex items-center justify-center min-h-screen">

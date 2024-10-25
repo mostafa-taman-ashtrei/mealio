@@ -25,6 +25,7 @@ export const PUT = async (req: Request, { params }: { params: { menuId: string }
 
             },
             include: {
+                qrcode: true,
                 menuItems: {
                     include: {
                         images: true,
@@ -56,6 +57,7 @@ export const GET = async (_: Request, { params }: { params: { menuId: string } }
         const newMenu = await prisma.menu.findUnique({
             where: { id: menuId, isDeleted: false },
             include: {
+                qrcode: true,
                 menuItems: {
                     include: {
                         images: true,
