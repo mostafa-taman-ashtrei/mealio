@@ -16,7 +16,11 @@ import { usePathname } from "next/navigation";
 const NavRoutes: React.FC<React.HTMLAttributes<HTMLElement>> = () => {
     const pathname = usePathname();
     const { isSignedIn, isLoaded } = useAuth();
+
     const routes = createNavRoutes(pathname, isSignedIn ? isSignedIn : false);
+    const isPubicMenuPage = pathname.startsWith("/m/");
+
+    if (isPubicMenuPage) return null;
 
     return (
         <div className="px-4 mx-auto max-w-7xl sm:px-6 pb-3">

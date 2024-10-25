@@ -223,8 +223,24 @@ const useRestaurant = create(
                         : restaurant
                 )
             }));
-        }
+        },
 
+
+        updateMenuTheme: (restaurantId, menuId, themeId) =>
+            set((state) => ({
+                restaurants: state.restaurants?.map(restaurant =>
+                    restaurant.id === restaurantId
+                        ? {
+                            ...restaurant,
+                            menus: restaurant.menus.map(menu =>
+                                menu.id === menuId
+                                    ? { ...menu, themeId }
+                                    : menu
+                            )
+                        }
+                        : restaurant
+                )
+            }))
     }), {
         name: "restaurant-storage",
         storage: createJSONStorage(() => localStorage)

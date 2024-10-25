@@ -43,3 +43,34 @@ export const PUT = async (req: Request, { params }: { params: { menuId: string }
         return NextResponse.json({ error: "Error creating menu" }, { status: 500 });
     }
 };
+
+
+export const GET = async (_: Request, { params }: { params: { menuId: string } }) => {
+    try {
+        const { menuId } = params;
+
+
+        if (!menuId) return NextResponse.json({ error: "Missing menuId" }, { status: 400 });
+
+
+        const newMenu = await prisma.menu.findUnique({
+            where: { id: menuId, isDeleted: false },
+            include: {
+                menuItems: {
+                    include: {
+                        images: true,
+                        discounts: {
+                            where: { isDeleted: false }
+                        }
+                    }
+                },
+            },
+        });
+
+        return NextResponse.json(newMenu, { status: 200 });
+
+    } catch (error) {
+        devLog(`Error fetching  menu: ${error}`, "error", "api");
+        return NextResponse.json({ error: "Error fetching  menu" }, { status: 500 });
+    }
+};

@@ -24,4 +24,6 @@ export type RestaurantStore = {
     addRestaurantDiscount: (restaurantId: string, discountData: Discount) => void;
     updateRestaurantDiscount: (restaurantId: string, discountId: string, data: Partial<Discount>) => void;
     removeRestaurantDiscount: (restaurantId: string, discountId: string) => void;
+
+    updateMenuTheme: (restaurantId: string, menuId: string, themeId: string) => void;
 };

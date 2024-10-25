@@ -39,6 +39,7 @@ model Menu {
   name         String
   description  String?
   menuItems    MenuItem[]
+  themeId      String?
   isDeleted    Boolean    @default(false)
   deletedAt    DateTime?
   createdAt    DateTime   @default(now())

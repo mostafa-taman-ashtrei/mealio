@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader, Trash } from "lucide-react";
+import { Link2, Loader, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -10,6 +10,7 @@ import deleteMenu from "@/services/menu/deleteMenu";
 import { devLog } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import useRestaurant from "@/hooks/useRestaurant";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type MenuItemProps = {
@@ -19,6 +20,7 @@ type MenuItemProps = {
 
 const MenuItem: React.FC<MenuItemProps> = ({ menu }) => {
     const { restaurants, removeMenu } = useRestaurant();
+    const router = useRouter();
     const [isDeleting, setIsDeleteing] = useState(false);
 
     const { name, description, id } = menu;
@@ -43,6 +45,12 @@ const MenuItem: React.FC<MenuItemProps> = ({ menu }) => {
         } finally {
             setIsDeleteing(false);
         }
+    };
+
+
+    const handleRedirect = () => {
+        const dynamicUrl = `/m/${menu.id}`;
+        router.push(dynamicUrl);
     };
 
     return (
@@ -76,6 +84,13 @@ const MenuItem: React.FC<MenuItemProps> = ({ menu }) => {
                 <div className="flex items-center space-x-2">
                     <UpdateMenuButton menu={menu} variant="ghost" />
 
+                    <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={handleRedirect}
+                    >
+                        <Link2 className="h-4 w-4" />
+                    </Button>
                     <Button
                         size="sm"
                         variant="ghost"
