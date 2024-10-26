@@ -1,43 +1,47 @@
-import { BookOpenText, CirclePercent, Store } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import useRestaurant from "@/hooks/useRestaurant";
 
 const PageGrid = () => {
+    const { restaurants } = useRestaurant();
+    const mainRestaurant = typeof restaurants !== "undefined" ? restaurants[0] : null;
+
+
+    if (!mainRestaurant) return null;
+
+    const stats = {
+        totalMenus: restaurants?.reduce((acc, r) => acc + r.menus.length, 0) || 0,
+        totalDiscounts: mainRestaurant.discounts?.length || 0,
+        totalItems: restaurants?.reduce((acc, r) =>
+            acc + r.menus.reduce((menuAcc, m) =>
+                menuAcc + m.menuItems.length, 0
+            ), 0
+        ) || 0,
+        totalQrCodes: restaurants?.reduce((acc, r) =>
+            acc + r.menus.reduce((menuAcc, m) =>
+                menuAcc + (m.qrcode ? 1 : 0), 0
+            ), 0
+        ) || 0,
+        activeDiscounts: mainRestaurant.discounts?.filter(d => d.isActive).length || 0
+    };
+
     return (
-        <div className="my-2 grid grid-cols-1 gap-6 divide-y md:grid-cols-2 p-3 lg:grid-cols-3">
-            <Link href="/dashboard/menus">
-                <Button
-                    className="flex w-full h-32 md:w-full flex-row items-center justify-center gap-2 text-3xl"
-                    variant="secondary"
-                >
-                    <BookOpenText size={35} />
-                    Menues
-                </Button>
-            </Link>
-
-            <Link href="/dashboard/discounts">
-                <Button
-                    className="flex w-full h-32 md:w-full flex-row items-center justify-center gap-2 text-3xl"
-                    variant="secondary"
-                >
-                    <CirclePercent size={35} />
-                    Discounts
-                </Button>
-            </Link>
-
-            <Link href="/dashboard/restaurants">
-                <Button
-                    className="flex w-full h-32 md:w-full flex-row items-center justify-center gap-2 text-3xl"
-                    variant="secondary"
-                >
-                    <Store size={35} />
-                    My Restaurant
-                </Button>
-            </Link>
-        </div>
-
+        <dl className="my-8 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">
+            <div className="flex flex-col bg-white/5 p-8">
+                <dt className="text-sm font-semibold leading-6 text-gray-300">Menus Created</dt>
+                <dd className="order-first text-3xl font-semibold tracking-tight">{stats.totalMenus}</dd>
+            </div>
+            <div className="flex flex-col bg-white/5 p-8">
+                <dt className="text-sm font-semibold leading-6 text-gray-300">Menu Items Created</dt>
+                <dd className="order-first text-3xl font-semibold tracking-tight">{stats.totalItems}</dd>
+            </div>
+            <div className="flex flex-col bg-white/5 p-8">
+                <dt className="text-sm font-semibold leading-6 text-gray-300">Active Discounts</dt>
+                <dd className="order-first text-3xl font-semibold tracking-tight">{stats.activeDiscounts}</dd>
+            </div>
+            <div className="flex flex-col bg-white/5 p-8">
+                <dt className="text-sm font-semibold leading-6 text-gray-300">Generated Qr Codes</dt>
+                <dd className="order-first text-3xl font-semibold tracking-tight">{stats.totalQrCodes}</dd>
+            </div>
+        </dl>
     );
-}
-    ;
+};
 export default PageGrid;

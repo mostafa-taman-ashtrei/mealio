@@ -23,3 +23,11 @@ export type CloudinaryAsset = {
     original_filename: string;
     api_key: string;
 };
+
+export type FomattedChartData = {
+    date: string;
+    qrScans: number;
+    directViews: number;
+    total: number;
+    menuName: string;
+}

@@ -24,4 +24,4 @@ export const getPublicIdFromUrl = (url: string): string => {
   return match ? match[1] : "";
 };
 
-export const generateDynamicMenuUrl = (menuId: string) => `${process.env.NEXT_PUBLIC_BASE_URL}/m/${menuId}`;
+export const generateDynamicMenuUrl = (menuId: string) => `${process.env.NEXT_PUBLIC_BASE_URL}/m/${menuId}?qr_code=true`;

@@ -97,13 +97,26 @@ model Discount {
 }
 
 model QrCode {
-  id        String    @id @default(uuid())
+  id        String     @id @default(uuid())
   codeUrl   String
-  menuId    String    @unique
-  menu      Menu      @relation(fields: [menuId], references: [id])
-  isActive  Boolean   @default(true)
-  isDeleted Boolean   @default(false)
+  menuId    String     @unique
+  menu      Menu       @relation(fields: [menuId], references: [id])
+  views     UrlViews[]
+  isActive  Boolean    @default(true)
+  isDeleted Boolean    @default(false)
   deletedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model UrlViews {
+  id        String   @id @default(cuid())
+  qrCodeId  String
+  qrCode    QrCode   @relation(fields: [qrCodeId], references: [id])
+  date      DateTime @default(now())
+  viewCount Int      @default(0)
+  qrCount   Int      @default(0)
+
+  @@unique([qrCodeId, date])
+  @@index([date])
 }

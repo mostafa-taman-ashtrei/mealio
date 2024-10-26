@@ -1,5 +1,8 @@
 "use client";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
+import { useEffect, useState } from "react";
+
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+
 import {
     Card,
     CardContent,
@@ -8,77 +11,90 @@ import {
     CardTitle
 } from "@/components/ui/card";
 
+import ActivityChartSkeleton from "@/components/skeletons/ActivityChartSkeleton";
 import {
     ChartConfig,
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
+import getAllUrlViews from "@/services/analytics/getAllUrlViews";
+import { FomattedChartData } from "@/types/ui";
+import { format } from "date-fns";
+import Empty from "@/components/general/Empty";
+import { Ghost } from "lucide-react";
 
-export const description = "A bar chart with a label";
-const chartData = [
-    { month: "January", hits: 186 },
-    { month: "February", hits: 305 },
-    { month: "March", hits: 237 },
-    { month: "April", hits: 73 },
-    { month: "May", hits: 209 },
-    { month: "June", hits: 214 },
-    { month: "July", hits: 250 },
-    { month: "August", hits: 280 },
-    { month: "September", hits: 195 },
-    { month: "October", hits: 220 },
-    { month: "November", hits: 170 },
-    { month: "December", hits: 310 },
-];
+export const description = "The total url visits in the last 30 days";
 
 const chartConfig = {
-    hits: {
-        label: "Hits",
+    qrScans: {
+        label: "Qr Scans",
         color: "hsl(var(--primary))",
+    },
+
+    directViews: {
+        label: "Dirct Views",
+        color: "hsl(var(--chart-1))",
     },
 } satisfies ChartConfig;
 
 
 const ActivityChart: React.FC = () => {
+    const [viewData, setViewData] = useState<FomattedChartData[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchViews = async () => {
+            const { data, status } = await getAllUrlViews();
+
+            if (status === 200) {
+                const formattedData = data.map(view => ({
+                    date: format(new Date(view.date), "dd"),
+                    qrScans: view.qrCount,
+                    directViews: view.viewCount,
+                    total: view.qrCount + view.viewCount,
+                    menuName: view.qrCode.menu.name,
+                }));
+
+                setViewData(formattedData);
+            }
+
+            setLoading(false);
+        };
+
+        fetchViews();
+    }, []);
+
+    if (loading) return <ActivityChartSkeleton />;
+
+    if (viewData.length === 0) return <Empty
+        title="No hits"
+        description="There were no hits at all in the past month"
+        icon={Ghost}
+    />;
+
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Qr Code Hits</CardTitle>
-                <CardDescription>
-                    {new Date().getFullYear()} Overview
-
-
-                </CardDescription>
+                <CardTitle>Total Url Hits</CardTitle>
+                <CardDescription> {format(new Date(), "MMMM")} Overview</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>
-                    <BarChart
-                        accessibilityLayer
-                        data={chartData}
-                        margin={{
-                            top: 20,
-                        }}
-                    >
+                    <BarChart accessibilityLayer data={viewData}>
                         <CartesianGrid vertical={false} />
                         <XAxis
-                            dataKey="month"
+                            dataKey="menuName"
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
-                            tickFormatter={(value) => value.slice(0, 3)}
                         />
                         <ChartTooltip
                             cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
+                            content={<ChartTooltipContent indicator="dashed" />}
                         />
-                        <Bar dataKey="hits" fill="var(--color-hits)" radius={8}>
-                            <LabelList
-                                position="top"
-                                offset={12}
-                                className="fill-foreground"
-                                fontSize={12}
-                            />
-                        </Bar>
+                        <Bar dataKey="directViews" fill="var(--color-directViews)" radius={4} />
+                        <Bar dataKey="qrScans" fill="var(--color-qrScans)" radius={4} />
                     </BarChart>
                 </ChartContainer>
             </CardContent>

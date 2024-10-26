@@ -1,14 +1,13 @@
-/* eslint-disable no-console */
+import { NextRequest, NextResponse } from "next/server";
 
-import { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { devLog } from "@/lib/utils";
 import { getAuth } from "@clerk/nextjs/server";
 
 const prisma = new PrismaClient();
 
 
-export const GET = async (req: NextApiRequest) => {
+export const GET = async (req: NextRequest) => {
     try {
         const { userId } = getAuth(req);
         if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -44,7 +43,7 @@ export const GET = async (req: NextApiRequest) => {
 
         return NextResponse.json({ user }, { status: 200 });
     } catch (error) {
-        console.error("Error fetching user data:", error);
+        devLog(`Error fetching user data: ${error}`, "error", "api");
         return NextResponse.json({ error: "Error fetching user data" }, { status: 500 });
     }
 };

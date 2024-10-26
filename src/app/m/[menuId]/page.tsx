@@ -6,10 +6,16 @@ import { MenuThemeType } from "@/types/theme";
 import { MenuWithItems } from "@/types/restaurant";
 import ThemeSkeleton from "@/components/skeletons/ThemeSkeleton";
 import getMenuData from "@/services/menu/getMenuData";
+import trackUrlViews from "@/services/analytics/trackUrlViews";
 import useMenuTheme from "@/hooks/useMenuTheme";
 import { useRouter } from "next/navigation";
 
-const MenuRedirect = ({ params }: { params: { menuId: string } }) => {
+type MenuRedirectProps = {
+    params: { menuId: string };
+    searchParams: { qr_code?: string };
+}
+
+const MenuRedirect: React.FC<MenuRedirectProps> = ({ params, searchParams }) => {
     const router = useRouter();
     const { getTheme } = useMenuTheme();
 
@@ -20,6 +26,8 @@ const MenuRedirect = ({ params }: { params: { menuId: string } }) => {
     useEffect(() => {
         const redirect = async () => {
             const { data, status, error } = await getMenuData(params.menuId);
+
+            await trackUrlViews(data.qrcode.id, searchParams.qr_code === "true");
 
             if (status === 500 || error) router.push("/dashboard");
             if (status === 200) {
@@ -34,7 +42,7 @@ const MenuRedirect = ({ params }: { params: { menuId: string } }) => {
         };
 
         redirect();
-    }, [getTheme, params.menuId, router]);
+    }, [getTheme, params.menuId, router, searchParams.qr_code]);
 
 
     if (loading) return <ThemeSkeleton />;

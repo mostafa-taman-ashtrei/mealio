@@ -7,16 +7,18 @@ import Link from "next/link";
 import ThemeTogglerButton from "./ThemeToggle";
 import { cn } from "@/lib/utils";
 import createNavRoutes from "./NavRoutes";
+import { useAuth } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const MobileNavbar: React.FC = () => {
+    const { isSignedIn } = useAuth();
     const [isOpen, setOpen] = useState<boolean>(false);
 
     const toggleOpen = () => setOpen((prev) => !prev);
 
     const pathname = usePathname();
-    const routes = createNavRoutes(pathname);
+    const routes = createNavRoutes(pathname, isSignedIn ? isSignedIn : false);
 
     return (
         <div className="sm:hidden">
